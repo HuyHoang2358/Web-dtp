@@ -1,0 +1,6 @@
+docker build -t web-hpg .   // build docker
+docker run --d --rm -p 5173:5173 --name [name container] [web-hpg]
+    -d to run container in background
+    --rm to delete container, when stop container
+    -p port
+docker ps // check whether docker containers is running
