@@ -3,10 +3,12 @@ import 'cesium/Build/Cesium/Widgets/widgets.css';
 
 import store from '@/store';
 import { getViewer, hiddenHTMLElementByClassName } from '@/DTP_3D/lib/common';
-import type { BaseMapLayer } from '@/DTP_3D/type/DTP3D.type';
+import type { AreaMetaData, BaseMapLayer } from '@/DTP_3D/type/DTP3D.type';
 import { flyTo } from '@/DTP_3D/module/camera';
 import { DATA3D_TILES } from '@/DTP_3D/config/data3D';
 import { addTileSet, visualizeModelEntity } from '@/DTP_3D/module/entity';
+import { getNoTextureObjects, getTextureObjects } from '@/DTP_3D/api/entity';
+import { createNameOverLay, stop_handle } from '@/DTP_3D/module/handle';
 
 function getMapType(map_type: string) {
   return map_type.substring(0, 2);
@@ -35,6 +37,10 @@ export async function initMap(HTML_element_id: string) {
   hiddenHTMLElementByClassName('cesium-viewer-fullscreenContainer');
   hiddenHTMLElementByClassName('cesium-viewer-animationContainer');
   hiddenHTMLElementByClassName('cesium-viewer-toolbar');
+
+  const nameOverLay = createNameOverLay();
+  await store.dispatch('VIEWER/setNameOverLay', nameOverLay);
+  stop_handle(viewer.screenSpaceEventHandler);
 }
 
 export async function changeBaseMap(baseMapLayer: BaseMapLayer) {
@@ -54,21 +60,24 @@ export function exitFullscreen() {
 }
 
 export function setDefaultMap() {
+  const viewer = getViewer();
   store.getters['VIEWER/getTileset'].forEach((tile: any) => {
     tile.tileset.show = false;
   });
-  store.getters['VIEWER/getEntities'].forEach((entity: any) => {
+  viewer.entities.removeAll();
+  /*store.getters['VIEWER/getEntities'].forEach((entity: any) => {
     entity.entity.show = false;
-  });
+  });*/
 }
 
-export async function turnOnArea(area: any) {
-  setDefaultMap();
+export async function turnOnArea(area: AreaMetaData, isDefault = true) {
+  if (isDefault) setDefaultMap();
   flyTo(area.center_point);
   switch (getMapType(area.type_key)) {
     case '2D':
       break;
     case '3D':
+      //draw_polygon();
       if (area.type_data === 'tile') {
         // Tile
         const data_tile = DATA3D_TILES.find((e) => e.area_id === area.id);
@@ -82,51 +91,20 @@ export async function turnOnArea(area: any) {
           tileInStore.tileset.show = true;
         }
       } else {
-        // GLTF
-        //  Texture
-        const data_gltf: any = DATA3D_TILES.find((e) => e.area_id === area.id);
-        if (data_gltf) {
-          fetch(data_gltf.entities_id)
-            .then((response) => response.text())
-            .then((text) => {
-              const objs = text.split('\n');
-              objs.forEach((obj) => {
-                fetch(`/data3D/gltf/json/${obj}.json`)
-                  .then((response) => {
-                    return response.json();
-                  })
-                  .then(async (data) => {
-                    let model_id = obj;
-                    if (area.type_key.includes('NO')) model_id = model_id + 'NO_Texture';
-                    else model_id = model_id + 'Texture';
-
-                    let entityStore = store.getters['VIEWER/getEntities'].find(
-                      (e: any) => e.key === model_id,
-                    );
-                    if (!entityStore) {
-                      const model = {
-                        key: model_id,
-                        id: obj,
-                        longitude: data['result']['location']['lng'],
-                        latitude: data['result']['location']['lat'],
-                        height: 0,
-                        heading: data?.result?.bearing || 0,
-                        pitch: 0,
-                        roll: 0,
-                        scale: 1,
-                      };
-                      const entity_c = visualizeModelEntity(model, !area.type_key.includes('NO'));
-                      entityStore = { ...model, entity: entity_c };
-                      await store.dispatch('VIEWER/pushEntity', entityStore);
-                    }
-                    entityStore.entity.show = true;
-                  });
-              });
-            });
+        let objs = null;
+        if (area.type_key.includes('NO')) {
+          // No Texture
+          objs = await getNoTextureObjects(area);
+        } else {
+          // Text ture
+          objs = await getTextureObjects(area);
         }
-        // No texture
 
-        console.log('3D - GLTF');
+        //console.log('OBJs', objs);
+        for (const obj of objs) {
+          const entity = visualizeModelEntity(obj.model);
+          await store.dispatch('VIEWER/pushEntity', { info: obj, entity: entity });
+        }
       }
       break;
     case '4D':

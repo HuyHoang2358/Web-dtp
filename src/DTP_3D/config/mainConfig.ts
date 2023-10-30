@@ -1,3 +1,5 @@
+import * as Cesium from 'cesium';
+
 export const CESIUM_TOKEN =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiYjJmMDA2NC0yY2YyLTRkOGEtOGVmYi03YmNmZmE1NzcyY2MiLCJpZCI6ODk3NzUsImlhdCI6MTY0OTkyNTEwMX0.VPFCxddX_V2UKjOJeqJszZ25c9z4HA2BSYimPLYrbWo';
 
@@ -44,3 +46,10 @@ export const PHUQUOC_CENTER_POINT = {
   pitch: -1.51004492,
   roll: 6.07005103,
 };
+
+export const ROUTE_WIDTH = 10;
+export const ROUTE_COLOR = Cesium.Color.GREEN;
+export const ROUTE_POINT_SIZE = 10;
+export const ROUTE_POINT_COLOR = Cesium.Color.RED.withAlpha(1);
+export const CAR_MODEL_ASSET_ID = 1555070;
+export const CAR_AVERAGE_SPEED = 40;

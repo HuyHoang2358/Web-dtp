@@ -1,4 +1,6 @@
 import store from '@/store';
+import type { Point } from '@/DTP_3D/type/DTP3D.type';
+import * as Cesium from 'cesium';
 
 export function formatTimeNumber(num: number) {
   return String(num).padStart(2, '0');
@@ -17,4 +19,14 @@ export function hiddenHTMLElementByClassName(element_class: string) {
 
 export function getViewer() {
   return store.getters['VIEWER/getViewer'];
+}
+
+export function formatDistance(num: number) {
+  if (num < 1000) return num.toFixed(2) + ' m';
+  else return (num / 1000).toFixed(2) + ' km';
+}
+export function distanceBetweenTwoPoint(point1: Point, point2: Point) {
+  const point1_cart3 = Cesium.Cartesian3.fromDegrees(point1.lng, point1.lat, point1.height);
+  const point2_cart3 = Cesium.Cartesian3.fromDegrees(point2.lng, point2.lat, point2.height);
+  return Cesium.Cartesian3.distance(point1_cart3, point2_cart3);
 }

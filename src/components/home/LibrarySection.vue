@@ -34,6 +34,7 @@
             class="col-span-1"
             v-for="(item, index) in sample_models"
             :key="index"
+            @click="addModel(item)"
           >
             <img
               :src="item.preview_img !== '' ? item?.preview_img : '/images/baseMap/no_image.png'"
@@ -88,6 +89,21 @@ const sample_models: ComputedRef = computed(() => {
   if (model3D_type.value === '') return [];
   return LIBRARY_MODELS.filter((e) => e.type === model3D_type.value);
 });
+const addModel = (item) => {
+  console.log(item);
+  const model_info = {
+    model_id: item.modelId,
+    model_url: '/data3D/gltf/glb_texture/' + item.modelId + '.glb',
+    latitude: 0,
+    longitude: 0,
+    height: 0,
+    pitch: 0,
+    roll: 0,
+    heading: 0,
+    scale: 1,
+    type: item.type,
+  };
+};
 </script>
 
 <style scoped>

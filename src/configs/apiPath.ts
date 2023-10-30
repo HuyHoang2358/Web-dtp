@@ -29,3 +29,10 @@ export const GEO_API_GET_LAYER_BY_GROUP = 'layer/get-all-layer';
 export const GEO_API_GET_IMAGES_IN_LAYER = 'search/get-all-image-in-layer';
 export const GEO_API_COMPARE_LAYERS = 'search/get-change-layer-detect-ai-offline';
 export const GEO_API_REPORT_CHANGE = 'search/get-statistic-change';
+
+export const WEB_API_ENTITY = 'entities/';
+export const WEB_API_GET_ENTITIES = 'entities/types/province';
+export const WEB_API_UPDATE_ENTITY = 'entities/';
+export const WEB_API_ADD_IMPORTANT_AREA = 'dtp/important-location';
+export const WEB_API_IMPORTANT_AREAS = '/dtp/important-location/get-all';
+export const WEB_API_IMPORTANT_AREA = '/dtp/important-location/';

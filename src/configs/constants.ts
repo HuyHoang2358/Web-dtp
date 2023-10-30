@@ -62,6 +62,25 @@ export const MODEL3D_TYPES = [
   },
 ];
 
+export const HOUSE_FUNCTIONS = [
+  {
+    value: 'Trung tâm thương mại',
+    label: 'Tòa nhà',
+  },
+  {
+    value: 'Cơ quan nhà nước',
+    label: 'Cơ quan nhà nước',
+  },
+  {
+    value: 'Chung cư ',
+    label: 'Chung cư',
+  },
+  {
+    value: 'Nhà dân sinh',
+    label: 'Nhà dân sinh',
+  },
+];
+
 export const LIBRARY_MODELS = [
   {
     modelId: '5b1a5a2e1c21e330bca3ef9d',

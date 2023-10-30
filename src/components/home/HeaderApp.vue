@@ -109,7 +109,7 @@
       </a-col>
     </a-row>
     <div class="w-full h-px bg-[#333333]" />
-    <div class="flex flex-row w-full justify-center space-x-8 h-11 items-center overflow-auto">
+    <!--    <div class="flex flex-row w-full justify-center space-x-8 h-11 items-center overflow-auto">
       <a-button class="font-bold bg-transparent border-0 text-white">
         THÔNG TIN TRUYỀN THÔNG
       </a-button>
@@ -123,7 +123,7 @@
         NÔNG NGHIỆP & PT NÔNG THÔN
       </a-button>
       <a-button class="font-bold bg-transparent border-0 text-white">BỘ CHỈ HUY QUÂN SỰ</a-button>
-    </div>
+    </div>-->
   </header>
 </template>
 

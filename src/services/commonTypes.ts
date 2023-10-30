@@ -11,3 +11,8 @@ export type CompareLayerRequestParams = {
   layerFirstId: string;
   layerSecondId: string;
 };
+
+export type EntityRequestParams = {
+  province: string;
+  type: string;
+};

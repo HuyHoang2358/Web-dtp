@@ -72,7 +72,7 @@
         <ButtonTool
           :name="ICON_TOOL_ACTIVE.POLYGON"
           :on-click="onClickIcon"
-          title="Vẽ Polygon"
+          title="Tạo lộ trình"
         >
           <IconPolygonActive v-if="store.iconToolActive === ICON_TOOL_ACTIVE.POLYGON" />
           <IconPolygon v-else />
@@ -81,7 +81,7 @@
         <ButtonTool
           :name="ICON_TOOL_ACTIVE.MEASURING_HORIZONTAL"
           :on-click="onClickIcon"
-          title="Đo chiều dài"
+          title="Bố trí vị trí quan trọng"
         >
           <IconMeasuringHorizontalActive
             v-if="store.iconToolActive === ICON_TOOL_ACTIVE.MEASURING_HORIZONTAL"
@@ -108,6 +108,9 @@
     <LayerMapSection v-if="store.iconToolActive === ICON_TOOL_ACTIVE.LAYER" />
     <MapTypeSection v-if="store.iconToolActive === ICON_TOOL_ACTIVE.MAP_TYPE" />
     <LibrarySection v-if="store.iconToolActive === ICON_TOOL_ACTIVE.MODEL" />
+    <ModelEditSection v-if="store.iconToolActive === ICON_TOOL_ACTIVE.EDIT_MODEL" />
+    <RouteEditSection v-if="store.iconToolActive === ICON_TOOL_ACTIVE.POLYGON" />
+    <ImportantAreaSection v-if="store.iconToolActive === ICON_TOOL_ACTIVE.MEASURING_HORIZONTAL" />
   </div>
 </template>
 
@@ -136,6 +139,10 @@ import { exitFullscreen, fullscreen } from '@/DTP_3D/module/map';
 import Icon3DModel from '@/components/icons/Icon3DModel.vue';
 import MapTypeSection from '@/components/home/MapTypeSection.vue';
 import LibrarySection from '@/components/home/LibrarySection.vue';
+import ModelEditSection from '@/components/home/ModelEditSection.vue';
+import { handle_draw_route } from '@/DTP_3D/module/handle';
+import RouteEditSection from '@/components/home/RouteEditSection.vue';
+import ImportantAreaSection from '@/components/home/ImportantAreaSection.vue';
 
 const store = useMapStore();
 
@@ -157,8 +164,9 @@ const onClickIcon = (name: ICON_TOOL_ACTIVE) => {
       else exitFullscreen();
       break;
     case ICON_TOOL_ACTIVE.POLYGON:
-      console.log(show_camera_position());
+      //console.log(show_camera_position());
       //DTP_DRAW.turnOnDrawPolygon();
+      handle_draw_route();
       break;
     case ICON_TOOL_ACTIVE.MEASURING_HORIZONTAL:
       //DTP_DRAW.turnOnMeasurePolyline();

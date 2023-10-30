@@ -20,4 +20,8 @@ export const DATA3D_TILES = [
     area_id: '2000000000000001212',
     entities_id: '/data3D/gltf/hanoi.txt',
   },
+  {
+    area_id: '2000000000000000007',
+    entities_id: '/data3D/gltf/danang.txt',
+  },
 ];
