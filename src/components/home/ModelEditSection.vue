@@ -4,7 +4,7 @@
       class="flex flex-col bg-[#151515] border border-solid rounded-sm border-[#2F2F2F] bg-opacity-90 add-layer-map-container"
     >
       <div class="flex items-center flex-row justify-between py-2 pl-5 pr-1">
-        <label class="text-white font-medium text-sm">Chỉnh sửa thông tin mô hình</label>
+        <label class="text-white font-medium text-sm">{{ titleForm }}</label>
         <a-button
           class="bg-transparent border-0"
           :icon="h(IconCancel)"
@@ -78,7 +78,7 @@
             </a-col>
             <a-col :span="8">
               <a-form-item
-                name="Height"
+                name="height"
                 label="Độ cao"
                 class="mb-1"
               >
@@ -391,16 +391,24 @@
 import { computed, ComputedRef, h, ref, toRaw } from 'vue';
 import IconCancel from '@/components/icons/IconCancel.vue';
 import { useMapStore } from '@/stores/map';
-import { updateSelectingModel } from '@/DTP_3D/module/entity';
 import { useUpdateEntity } from '@/services/hooks/useEntity';
 import { notification } from 'ant-design-vue';
 import IconCustomDropdown from '@/components/icons/IconCustomDropdown.vue';
 import { HOUSE_FUNCTIONS } from '@/configs/constants';
+import { useEditingModel } from '@/stores/editingModel';
+import libraryController from '@/services/controller/libraryController';
+
 const store = useMapStore();
 
+const editingModelStore = useEditingModel();
+
+const titleForm = computed(() => {
+  if (editingModelStore.isEditing) return 'Chỉnh sửa thông tin mô hình';
+  return 'Thêm mới thông tin mô hình';
+});
 interface FormModel {
-  id: string;
-  model_id: string;
+  id?: string;
+  model_url: string;
   latitude: number;
   longitude: number;
   height: number;
@@ -422,7 +430,7 @@ const formRef = ref();
 
 const is_modify_position_form = ref<boolean>(true);
 const formModel: ComputedRef<FormModel> = computed(() => {
-  return store.selectingModel;
+  return editingModelStore.model_info;
 });
 const { mutate } = useUpdateEntity();
 const prepare_edit_data_form = (): any => {
@@ -472,9 +480,24 @@ const onSubmit = () => {
     store.changeActiveTool();
   });
 };
+const validate_number = (x: any) => {
+  return !isNaN(parseFloat(x)) && isFinite(x);
+};
+const validate_form = () => {
+  return (
+    validate_number(formModel.value.height) &&
+    validate_number(formModel.value.latitude) &&
+    validate_number(formModel.value.longitude) &&
+    validate_number(formModel.value.heading) &&
+    validate_number(formModel.value.pitch) &&
+    validate_number(formModel.value.roll) &&
+    validate_number(formModel.value.scale)
+  );
+};
 const changeModelInfo = () => {
-  //console.log('model Info', formModel.value);
-  updateSelectingModel(formModel.value);
+  if (validate_form()) {
+    libraryController.modifyPositionModelEntity(formModel.value);
+  }
 };
 </script>
 

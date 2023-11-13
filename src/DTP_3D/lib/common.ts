@@ -30,3 +30,18 @@ export function distanceBetweenTwoPoint(point1: Point, point2: Point) {
   const point2_cart3 = Cesium.Cartesian3.fromDegrees(point2.lng, point2.lat, point2.height);
   return Cesium.Cartesian3.distance(point1_cart3, point2_cart3);
 }
+
+export function get_position(movement_position: any) {
+  const viewer = getViewer();
+  const cartesian = viewer.camera.pickEllipsoid(movement_position, viewer.scene.globe.ellipsoid);
+  if (cartesian) {
+    const cartographic = Cesium.Cartographic.fromCartesian(cartesian);
+    const longitude = parseFloat(Cesium.Math.toDegrees(cartographic.longitude).toFixed(6));
+    const latitude = parseFloat(Cesium.Math.toDegrees(cartographic.latitude).toFixed(6));
+    return {
+      latitude: latitude,
+      longitude: longitude,
+    };
+  }
+  return null;
+}

@@ -1,9 +1,10 @@
-// @ts-ignore
+// @ts-nocheck
 import * as Cesium from 'cesium';
 import { getViewer } from '@/DTP_3D/lib/common';
 import store from '@/store';
 import { draw_polygon } from '@/DTP_3D/module/polygon';
 import { handle_move_get_position } from '@/DTP_3D/module/handle';
+import type { ModelEntityInfo } from '@/DTP_3D/type/DTP3D.type';
 
 export function changeHeightTileset(tileset: any, heightOffset: any) {
   const boundingSphere = tileset.boundingSphere;
@@ -168,4 +169,40 @@ export async function addModel(model: any) {
   await store.dispatch('VIEWER/setSelectedEntity', model_e);
 
   await handle_move_get_position();
+}
+
+export function updateModelEntity(model_entity: any, model_info: ModelEntityInfo) {
+  console.log(model_info);
+  const position_info = prepare_position(
+    model_info.longitude,
+    model_info.latitude,
+    parseFloat(model_info.height),
+    model_info.heading,
+    model_info.pitch,
+    model_info.roll,
+  );
+  model_entity.position = position_info.position;
+  model_entity.orientation = position_info.orientation;
+  model_entity.model.scale = model_info.scale;
+}
+export function addModelEntity(model: ModelEntityInfo) {
+  const viewer = getViewer();
+  const position_info = prepare_position(
+    model.longitude,
+    model.latitude,
+    model.height,
+    model.heading,
+    model.pitch,
+    model.roll,
+  );
+  return viewer.entities.add({
+    name: model.name,
+    description: model.description,
+    position: position_info.position,
+    orientation: position_info.orientation,
+    model: {
+      uri: model.model_url,
+      scale: model.scale,
+    },
+  });
 }

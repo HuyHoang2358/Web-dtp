@@ -127,14 +127,14 @@ body,
   color: #717171;
   font-size: 12px;
   font-weight: 400;
-  font-family: "Sarabun", 'sans-serif';
+  font-family: 'Sarabun', 'sans-serif';
 }
 
 .ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
   color: #d0002d;
   font-size: 12px;
   font-weight: 500;
-  font-family: "Sarabun", 'sans-serif';
+  font-family: 'Sarabun', 'sans-serif';
 }
 
 .ant-tabs > .ant-tabs-nav .ant-tabs-nav-list,
@@ -143,11 +143,14 @@ body,
   margin-top: 8px;
 }
 
-.ant-tabs-top >.ant-tabs-nav, .ant-tabs-bottom >.ant-tabs-nav, .ant-tabs-top >div>.ant-tabs-nav,.ant-tabs-bottom >div>.ant-tabs-nav {
+.ant-tabs-top > .ant-tabs-nav,
+.ant-tabs-bottom > .ant-tabs-nav,
+.ant-tabs-top > div > .ant-tabs-nav,
+.ant-tabs-bottom > div > .ant-tabs-nav {
   margin: 0;
 }
 
-.ant-upload-wrapper .ant-upload-drag{
+.ant-upload-wrapper .ant-upload-drag {
   border-color: #484848;
   background: #242323;
 }

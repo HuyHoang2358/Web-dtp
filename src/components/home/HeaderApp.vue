@@ -81,7 +81,10 @@
               15:42:36
             </a-typography-text>
             <IconLine />
-            <a-typography-text class="text-white font-normal whitespace-nowrap">
+            <a-typography-text
+              class="text-white font-normal whitespace-nowrap"
+              id="oclock_date"
+            >
               20/10/2023
             </a-typography-text>
           </div>

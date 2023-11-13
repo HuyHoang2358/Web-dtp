@@ -4,6 +4,8 @@ import { ICON_TOOL_ACTIVE } from '@/configs/enums';
 
 export const useMapStore = defineStore('map', () => {
   const iconToolActive = ref<ICON_TOOL_ACTIVE | undefined>(undefined);
+  const selectingModelInfo = ref();
+  const selectingModelEntity = ref();
   const selectingModel = ref({
     id: '',
     model_id: '',
@@ -28,5 +30,7 @@ export const useMapStore = defineStore('map', () => {
     changeActiveTool,
     selectingModel,
     changeSelectingModel,
+    selectingModelInfo,
+    selectingModelEntity,
   };
 });

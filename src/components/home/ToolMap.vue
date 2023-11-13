@@ -72,7 +72,7 @@
         <ButtonTool
           :name="ICON_TOOL_ACTIVE.POLYGON"
           :on-click="onClickIcon"
-          title="Tạo lộ trình"
+          title="Lộ trình"
         >
           <IconPolygonActive v-if="store.iconToolActive === ICON_TOOL_ACTIVE.POLYGON" />
           <IconPolygon v-else />
@@ -98,17 +98,20 @@
         </ButtonTool>
         <ButtonTool
           :on-click="onClickIcon"
-          :name="ICON_TOOL_ACTIVE.UPLOAD"
-          title="Upload"
+          :name="ICON_TOOL_ACTIVE.LOCATE"
+          title="GPS"
+          class="w-6 h-8 p-1 pb-2"
         >
-          <IconUpload />
+          <IconGetLocate />
         </ButtonTool>
       </div>
     </div>
     <LayerMapSection v-if="store.iconToolActive === ICON_TOOL_ACTIVE.LAYER" />
     <MapTypeSection v-if="store.iconToolActive === ICON_TOOL_ACTIVE.MAP_TYPE" />
     <LibrarySection v-if="store.iconToolActive === ICON_TOOL_ACTIVE.MODEL" />
-    <ModelEditSection v-if="store.iconToolActive === ICON_TOOL_ACTIVE.EDIT_MODEL" />
+    <ModelEditSection
+      v-if="editingModelStore.isOpen && store.iconToolActive === ICON_TOOL_ACTIVE.EDIT_MODEL"
+    />
     <RouteEditSection v-if="store.iconToolActive === ICON_TOOL_ACTIVE.POLYGON" />
     <ImportantAreaSection v-if="store.iconToolActive === ICON_TOOL_ACTIVE.MEASURING_HORIZONTAL" />
   </div>
@@ -124,7 +127,6 @@ import IconRuler from '@/components/icons/tools/IconRuler.vue';
 import ButtonTool from '@/components/home/ButtonTool.vue';
 import { ICON_TOOL_ACTIVE } from '@/configs/enums';
 import IconMeasuringHorizontal from '@/components/icons/tools/IconMeasuringHorizontal.vue';
-import IconUpload from '@/components/icons/tools/IconUpload.vue';
 import LayerMapSection from '@/components/home/LayerMapSection.vue';
 import IconPolygonActive from '@/components/icons/tools/IconPolygonActive.vue';
 import { useMapStore } from '@/stores/map';
@@ -143,8 +145,12 @@ import ModelEditSection from '@/components/home/ModelEditSection.vue';
 import { handle_draw_route } from '@/DTP_3D/module/handle';
 import RouteEditSection from '@/components/home/RouteEditSection.vue';
 import ImportantAreaSection from '@/components/home/ImportantAreaSection.vue';
+import IconGetLocate from '@/components/icons/iconGetLocate.vue';
+import { trackingGPS } from '@/controller/gps';
+import { useEditingModel } from '@/stores/editingModel';
 
 const store = useMapStore();
+const editingModelStore = useEditingModel();
 
 const onClickIcon = (name: ICON_TOOL_ACTIVE) => {
   switch (name) {
@@ -166,13 +172,16 @@ const onClickIcon = (name: ICON_TOOL_ACTIVE) => {
     case ICON_TOOL_ACTIVE.POLYGON:
       //console.log(show_camera_position());
       //DTP_DRAW.turnOnDrawPolygon();
-      handle_draw_route();
+      //handle_draw_route();
       break;
     case ICON_TOOL_ACTIVE.MEASURING_HORIZONTAL:
       //DTP_DRAW.turnOnMeasurePolyline();
       break;
     case ICON_TOOL_ACTIVE.RULER:
       //DTP_DRAW.turnOnMeasurePolygon();
+      break;
+    case ICON_TOOL_ACTIVE.LOCATE:
+      trackingGPS();
       break;
     default:
       break;

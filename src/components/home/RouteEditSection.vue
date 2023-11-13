@@ -4,7 +4,7 @@
       class="flex flex-col bg-[#151515] border border-solid rounded-sm border-[#2F2F2F] bg-opacity-90 add-layer-map-container"
     >
       <div class="flex items-center flex-row justify-between py-2 pl-5 pr-1">
-        <label class="text-white text-sm font-bold">Thông tin lộ trình</label>
+        <label class="text-white text-sm font-bold">Lộ trình</label>
         <a-button
           class="bg-transparent border-0"
           :icon="h(IconCancel)"
@@ -13,21 +13,16 @@
       </div>
       <div class="h-px w-full bg-[#373737]" />
       <div class="px-4 py-2 text-white flex flex-col text-[13px]">
-        <p class="text-[14px]">Chiều dài lộ trình</p>
-        <p
-          class="bg-[#353535] p-2 rounded w-full"
-          id="route_distance"
+        <p class="text-[14px] mt-4">Danh sách các lộ trình</p>
+        <div
+          class="mt-2 mb-2 flex justify-between items-center bg-[#353535] p-2 rounded w-full"
+          @click="showRoute(1)"
         >
-          0 m
-        </p>
-
-        <p class="text-[14px] mt-4">Danh sách các điểm cần lưu ý</p>
-        <div class="mt-2 mb-2 flex justify-between items-center bg-[#353535] p-2 rounded w-full">
           <p
             class="mb-0"
             id="route_distance"
           >
-            + Ngã tư ...
+            + Phủ Thủ Tướng -> Khách sạn Marriott
           </p>
           <div class="w-4 h-4">
             <svg
@@ -48,7 +43,7 @@
             class="mb-0"
             id="route_distance"
           >
-            + Ngã ba ...
+            + Hà Nội -> Lào Cai
           </p>
           <div class="w-4 h-4">
             <svg
@@ -63,6 +58,14 @@
               />
             </svg>
           </div>
+        </div>
+        <div class="mt-2 mb-2 flex justify-between items-center bg-[#353535] p-2 rounded w-full">
+          <p
+            class="mb-0"
+            id="route_distance"
+          >
+            + Thêm lộ trình
+          </p>
         </div>
 
         <div class="w-full">
@@ -126,6 +129,11 @@ import { useMapStore } from '@/stores/map';
 import IconAddLayerActive from '@/components/icons/home/IconAddLayerActive.vue';
 import { simulationRoute, stopSimulationRoute, trackingEntity } from '@/DTP_3D/module/simulation';
 const store = useMapStore();
+
+const showRoute = (routeId: number) => {
+  if (routeId === 1) {
+  }
+};
 </script>
 
 <style scoped>

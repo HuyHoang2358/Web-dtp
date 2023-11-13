@@ -78,6 +78,7 @@ import IconEmpty from '@/components/icons/home/IconEmpty.vue';
 
 import { LIBRARY_MODELS, MODEL3D_TYPES } from '@/configs/constants';
 import IconCustomDropdown from '@/components/icons/IconCustomDropdown.vue';
+import libraryController from '@/services/controller/libraryController';
 
 const store = useMapStore();
 
@@ -89,20 +90,8 @@ const sample_models: ComputedRef = computed(() => {
   if (model3D_type.value === '') return [];
   return LIBRARY_MODELS.filter((e) => e.type === model3D_type.value);
 });
-const addModel = (item) => {
-  console.log(item);
-  const model_info = {
-    model_id: item.modelId,
-    model_url: '/data3D/gltf/glb_texture/' + item.modelId + '.glb',
-    latitude: 0,
-    longitude: 0,
-    height: 0,
-    pitch: 0,
-    roll: 0,
-    heading: 0,
-    scale: 1,
-    type: item.type,
-  };
+const addModel = (item: any) => {
+  libraryController.addModel(item);
 };
 </script>
 

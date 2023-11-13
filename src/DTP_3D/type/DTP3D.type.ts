@@ -40,3 +40,19 @@ export type Point = {
   lng: number;
   height: number;
 };
+
+export type EntityPosition = {
+  latitude: number;
+  longitude: number;
+  height: number;
+  heading: number;
+  pitch: number;
+  roll: number;
+};
+
+export type ModelEntityInfo = {
+  model_url: string;
+  name: string;
+  scale: number;
+  description: string;
+} & EntityPosition;
