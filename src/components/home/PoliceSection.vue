@@ -4,11 +4,11 @@
       class="flex flex-col bg-[#151515] border border-solid rounded-sm border-[#2F2F2F] bg-opacity-90 add-layer-map-container"
     >
       <div class="flex items-center flex-row justify-between py-2 pl-5 pr-1">
-        <label class="text-white font-medium text-sm">Khu vực đã lưu</label>
+        <label class="text-white font-medium text-sm">Danh sách cán bộ</label>
         <a-button
           class="bg-transparent border-0"
           :icon="h(IconCancel)"
-          @click="store.changeActiveTool()"
+          @click="offPolices"
         />
       </div>
 
@@ -24,63 +24,46 @@
         </a-input>
       </div>
 
-      <a-tabs
-        v-model:activeKey="activeIndexTab"
-        type="line"
-        size="small"
-        :tabBarGutter="16"
-        class="flex"
-      >
-        <template #moreIcon>
-          <IconThreeDot
-            class="rotate-90"
-            style="margin-bottom: -2.5px"
-          />
-        </template>
-        <a-tab-pane
-          v-for="item in MAP_TYPES"
-          :key="item.key"
-          :tab="item.name"
-          :content="null"
-        ></a-tab-pane>
-      </a-tabs>
-
       <div
         class="overflow-auto mr-2 mt-2"
-        v-if="areas.length > 0"
+        v-if="polices.length > 0"
       >
         <ul class="w-full p-0 list-none">
           <li
-            :class="'flex flex-col pl-5 pt-2 group'"
-            v-for="(item, index) in areas"
+            :class="['flex flex-col pl-5 pt-2 group', item.id === activeId && 'bg-[#333333]']"
+            v-for="(item, index) in polices"
             :key="index"
           >
             <div class="flex flex-row">
               <img
-                :src="
-                  item.preview_image !== '' ? item?.preview_image : '/images/baseMap/no_image.png'
-                "
+                :src="item.avatarUrl !== '' ? item?.avatarUrl : '/images/baseMap/no_image.png'"
                 alt="layer-map"
                 width="78"
                 height="59"
                 class="border border-solid border-[#6D6D6D] rounded-sm cursor-pointer"
-                @click="onClickArea(item)"
+                @click="policeController.showInfoPolice(item)"
               />
               <div class="flex flex-row justify-between w-full">
                 <div class="flex flex-col pl-3.5">
                   <div
                     class="cursor-pointer"
-                    @click="onClickArea(item)"
+                    @click="policeController.showInfoPolice(item)"
                   >
                     <IconPublic />
                     <label
-                      class="text-sm text-[#C0C0C0] font-medium ml-1 cursor-pointer group-hover:text-white"
+                      :class="[
+                        'text-sm text-[#C0C0C0] font-medium ml-1 cursor-pointer',
+                        item.id === activeId ? 'text-main' : 'group-hover:text-white',
+                      ]"
                     >
-                      {{ item?.name }}
+                      {{ item?.name }} - {{ item?.code }}
                     </label>
                   </div>
                   <a-typography-text class="text-[#C0C0C0] text-xs mt-0.5 text-date font-normal">
-                    {{ item?.description }}
+                    {{ item?.phone }}
+                  </a-typography-text>
+                  <a-typography-text class="text-[#C0C0C0] text-xs mt-0.5 text-date font-normal">
+                    {{ item?.position }}
                   </a-typography-text>
                 </div>
               </div>
@@ -111,17 +94,21 @@
 
       <a-button
         class="group flex justify-center items-center bg-[#222222] border border-dashed border-[#86001D] text-sm text-[#BBBBBB] m-4 mt-3"
-        @click="showModalAddLayer = true"
+        @click="showModalHandle = true"
       >
         <IconAddLayer class="mr-1.5 group-hover:hidden block" />
         <IconAddLayerActive class="mr-1.5 hidden group-hover:block" />
-        Thêm mới lớp bản đồ
+        Thêm mới cán bộ
       </a-button>
     </div>
   </div>
+  <ModalHandlePolice
+    :open="showModalHandle"
+    :close="closeModalHandle"
+  />
 </template>
 <script setup lang="ts">
-import { computed, ComputedRef, h, ref } from 'vue';
+import { h, ref, computed } from 'vue';
 import IconCancel from '@/components/icons/IconCancel.vue';
 import IconAddLayer from '@/components/icons/home/IconAddLayer.vue';
 
@@ -131,36 +118,32 @@ import IconSearchInput from '@/components/icons/home/IconSearchInput.vue';
 import IconAddLayerActive from '@/components/icons/home/IconAddLayerActive.vue';
 
 import IconEmpty from '@/components/icons/home/IconEmpty.vue';
-
-import { MAP_TYPES, AREAS } from '@/DTP_3D/config/MapConfig';
-import IconThreeDot from '@/components/icons/IconThreeDot.vue';
-import { changeBaseMap, turnOnArea } from '@/DTP_3D/module/map';
 import IconPublic from '@/components/icons/home/IconPublic.vue';
-import { HANOI_CENTER_POINT } from '@/DTP_3D/config/mainConfig';
+
+import IconThreeDot from '@/components/icons/IconThreeDot.vue';
+import ModalHandlePolice from '@/components/home/ModalHandlePolice.vue';
+import { usePolices } from '@/services/hooks/usePolice';
+import policeController from '@/services/controller/policeController';
 
 const store = useMapStore();
-const activeIndexTab = ref<string>('3D_NO_TEXTURE');
 const activeId = ref<string>('');
 const searchValue = ref<string>('');
 
-const showModalAddLayer = ref(false);
+const showModalHandle = ref(false);
 
-const onClickItem = (basemapLayer: any) => {
-  activeId.value = basemapLayer.id;
-  changeBaseMap(basemapLayer);
-};
-
-/*watch(activeIndexTab, () => {
-  console.log(activeIndexTab);
-});*/
-const onClickArea = (area: any) => {
-  turnOnArea(area);
-};
-
-const areas: ComputedRef = computed(() => {
-  if (activeIndexTab.value === '') return [];
-  return AREAS.filter((e) => e.type_key === activeIndexTab.value && e.active);
+const { data } = usePolices();
+const polices = computed(() => {
+  return data?.value?.data || [];
 });
+
+const closeModalHandle = () => {
+  showModalHandle.value = false;
+};
+const offPolices = () => {
+  store.changeActiveTool();
+  policeController.turnOffPolice();
+  store.policeDetail = false;
+};
 </script>
 
 <style scoped>

@@ -172,7 +172,7 @@ export async function addModel(model: any) {
 }
 
 export function updateModelEntity(model_entity: any, model_info: ModelEntityInfo) {
-  console.log(model_info);
+  //console.log(model_info);
   const position_info = prepare_position(
     model_info.longitude,
     model_info.latitude,
@@ -205,4 +205,8 @@ export function addModelEntity(model: ModelEntityInfo) {
       scale: model.scale,
     },
   });
+}
+export function removeEntity(entity) {
+  const viewer = getViewer();
+  if (entity) viewer.entities.remove(entity);
 }

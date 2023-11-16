@@ -13,15 +13,20 @@ export const useEditingModel = defineStore('editingModel', () => {
     heading: 0,
     pitch: 0,
     roll: 0,
+    pin_height: 40,
+    type: '',
   });
   const model_entity = ref();
-
+  const label_text = ref('');
+  const label_entity = ref();
   const isOpen = ref(false);
   const isEditing = ref(false);
 
   return {
     model_info,
     model_entity,
+    label_text,
+    label_entity,
     isOpen,
     isEditing,
   };

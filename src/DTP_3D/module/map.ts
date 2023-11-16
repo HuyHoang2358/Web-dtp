@@ -64,7 +64,7 @@ export function setDefaultMap() {
   store.getters['VIEWER/getTileset'].forEach((tile: any) => {
     tile.tileset.show = false;
   });
-  viewer.entities.removeAll();
+  if (viewer?.entities) viewer.entities.removeAll();
   /*store.getters['VIEWER/getEntities'].forEach((entity: any) => {
     entity.entity.show = false;
   });*/
@@ -100,7 +100,7 @@ export async function turnOnArea(area: AreaMetaData, isDefault = true) {
           objs = await getTextureObjects(area);
         }
 
-        //console.log('OBJs', objs);
+        console.log('OBJs', objs);
         for (const obj of objs) {
           const entity = visualizeModelEntity(obj.model);
           await store.dispatch('VIEWER/pushEntity', { info: obj, entity: entity });

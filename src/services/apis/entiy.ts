@@ -45,3 +45,5 @@ export const fetchEntity = (entityId: string) => clientWebApi.get(`${WEB_API_ENT
 
 export const updateEntity = (data: any) =>
   clientWebApi.post(`${WEB_API_UPDATE_ENTITY}${data.id}/attrs`, data);
+
+export const addEntity = (data: any) => clientWebApi.post(WEB_API_UPDATE_ENTITY, data);

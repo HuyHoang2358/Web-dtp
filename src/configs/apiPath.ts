@@ -36,3 +36,9 @@ export const WEB_API_UPDATE_ENTITY = 'entities/';
 export const WEB_API_ADD_IMPORTANT_AREA = 'dtp/important-location';
 export const WEB_API_IMPORTANT_AREAS = '/dtp/important-location/get-all';
 export const WEB_API_IMPORTANT_AREA = '/dtp/important-location/';
+
+export const WEB_API_ADD_POLICE = '/dtp/force/add';
+export const WEB_API_POLICES = '/dtp/force/get-all';
+export const WEB_API_POLICE = '/dtp/force/';
+
+export const WEB_API_ROIS = '/focus-location/get-all';

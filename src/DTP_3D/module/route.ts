@@ -45,3 +45,16 @@ export function updatePolylineEntity(polylineEntity: any, points: any) {
   console.log('polylineEntity', polylineEntity);
   polylineEntity.polyline.positions = Cesium.Cartesian3.fromDegreesArray(positions);
 }
+
+export function addRouteEntity(points: any) {
+  const viewer = getViewer();
+  return viewer.entities.add({
+    name: 'Route',
+    polyline: {
+      positions: Cesium.Cartesian3.fromDegreesArray(points),
+      width: ROUTE_WIDTH,
+      material: ROUTE_COLOR,
+      clampToGround: true,
+    },
+  });
+}

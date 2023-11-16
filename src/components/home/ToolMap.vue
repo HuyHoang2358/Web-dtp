@@ -18,14 +18,6 @@
         >
           <IconBookmark />
         </ButtonTool>
-        <!--        <a-divider class="h-px m-0 bg-[#333333]" />
-        <ButtonTool
-          :on-click="onClickIcon"
-          :name="ICON_TOOL_ACTIVE.PRINTING"
-          title="In file bản đồ"
-        >
-          <IconPrinting />
-        </ButtonTool>-->
         <a-divider class="h-px m-0 bg-[#333333]" />
         <ButtonTool
           :on-click="onClickIcon"
@@ -33,6 +25,17 @@
           title="Đối tượng 3D"
         >
           <Icon3DModel />
+        </ButtonTool>
+        <a-divider class="h-px m-0 bg-[#333333]" />
+        <ButtonTool
+          :on-click="onClickIcon"
+          :name="ICON_TOOL_ACTIVE.IMPORTANT_LOCAL"
+          title="Ghim Vị trí"
+        >
+          <IconImportantPosActive
+            v-if="store.iconToolActive === ICON_TOOL_ACTIVE.IMPORTANT_LOCAL"
+          />
+          <IconImportantPos v-else />
         </ButtonTool>
       </div>
       <div class="flex flex-col items-center w-10 bg-[#151515] bg-opacity-90 rounded-sm mt-2">
@@ -74,27 +77,33 @@
           :on-click="onClickIcon"
           title="Lộ trình"
         >
-          <IconPolygonActive v-if="store.iconToolActive === ICON_TOOL_ACTIVE.POLYGON" />
-          <IconPolygon v-else />
+          <IconRouterActive v-if="store.iconToolActive === ICON_TOOL_ACTIVE.POLYGON" />
+          <IconRouter v-else />
         </ButtonTool>
         <a-divider class="h-px m-0 bg-[#333333]" />
         <ButtonTool
-          :name="ICON_TOOL_ACTIVE.MEASURING_HORIZONTAL"
+          :name="ICON_TOOL_ACTIVE.POLICE"
           :on-click="onClickIcon"
-          title="Bố trí vị trí quan trọng"
+          title="Danh sách cán bộ"
         >
-          <IconMeasuringHorizontalActive
-            v-if="store.iconToolActive === ICON_TOOL_ACTIVE.MEASURING_HORIZONTAL"
-          />
-          <IconMeasuringHorizontal v-else />
+          <IconPoliceActive v-if="store.iconToolActive === ICON_TOOL_ACTIVE.POLICE" />
+          <IconPolice v-else />
         </ButtonTool>
-        <ButtonTool
+        <!--        <ButtonTool
           :name="ICON_TOOL_ACTIVE.RULER"
           :on-click="onClickIcon"
           title="Đo diện tích"
         >
           <IconRulerActive v-if="store.iconToolActive === ICON_TOOL_ACTIVE.RULER" />
           <IconRuler v-else />
+        </ButtonTool>-->
+        <ButtonTool
+          :name="ICON_TOOL_ACTIVE.SNIPER"
+          :on-click="onClickIcon"
+          title="Kiểm tra bắn tỉa"
+        >
+          <IconSniperActive v-if="store.iconToolActive === ICON_TOOL_ACTIVE.SNIPER" />
+          <IconSniper v-else />
         </ButtonTool>
         <ButtonTool
           :on-click="onClickIcon"
@@ -112,8 +121,14 @@
     <ModelEditSection
       v-if="editingModelStore.isOpen && store.iconToolActive === ICON_TOOL_ACTIVE.EDIT_MODEL"
     />
+    <SniperSection v-if="store.iconToolActive === ICON_TOOL_ACTIVE.SNIPER" />
     <RouteEditSection v-if="store.iconToolActive === ICON_TOOL_ACTIVE.POLYGON" />
     <ImportantAreaSection v-if="store.iconToolActive === ICON_TOOL_ACTIVE.MEASURING_HORIZONTAL" />
+    <PoliceSection v-if="store.iconToolActive === ICON_TOOL_ACTIVE.POLICE" />
+    <PoliceDetailSection
+      v-if="store.iconToolActive === ICON_TOOL_ACTIVE.POLICE && store.policeDetail"
+    />
+    <ImportantPosSection v-if="store.iconToolActive === ICON_TOOL_ACTIVE.IMPORTANT_LOCAL" />
   </div>
 </template>
 
@@ -148,7 +163,20 @@ import ImportantAreaSection from '@/components/home/ImportantAreaSection.vue';
 import IconGetLocate from '@/components/icons/iconGetLocate.vue';
 import { trackingGPS } from '@/controller/gps';
 import { useEditingModel } from '@/stores/editingModel';
-
+import IconSniper from '@/components/icons/IconSniper.vue';
+import IconSniperActive from '@/components/icons/IconSniperActive.vue';
+import IconRouter from '@/components/icons/IconRouter.vue';
+import IconRouterActive from '@/components/icons/IconRouterActive.vue';
+import SniperSection from '@/components/home/SniperSection.vue';
+import sniperController from '@/services/controller/sniperController';
+import IconPoliceActive from '@/components/icons/tools/IconPoliceActive.vue';
+import IconPolice from '@/components/icons/tools/IconPolice.vue';
+import PoliceSection from '@/components/home/PoliceSection.vue';
+import policeController from '@/services/controller/policeController';
+import PoliceDetailSection from '@/components/home/PoliceDetailSection.vue';
+import IconImportantPos from '@/components/icons/IconImportantPos.vue';
+import IconImportantPosActive from '@/components/icons/IconImportantPosActive.vue';
+import ImportantPosSection from '@/components/home/ImportantPosSection.vue';
 const store = useMapStore();
 const editingModelStore = useEditingModel();
 
@@ -174,8 +202,12 @@ const onClickIcon = (name: ICON_TOOL_ACTIVE) => {
       //DTP_DRAW.turnOnDrawPolygon();
       //handle_draw_route();
       break;
-    case ICON_TOOL_ACTIVE.MEASURING_HORIZONTAL:
+    case ICON_TOOL_ACTIVE.SNIPER:
+      sniperController.turnOnSniper();
+      break;
+    case ICON_TOOL_ACTIVE.POLICE:
       //DTP_DRAW.turnOnMeasurePolyline();
+      policeController.turnOnPolice();
       break;
     case ICON_TOOL_ACTIVE.RULER:
       //DTP_DRAW.turnOnMeasurePolygon();
@@ -188,4 +220,7 @@ const onClickIcon = (name: ICON_TOOL_ACTIVE) => {
   }
   store.changeActiveTool(name);
 };
+
+// Init map
 </script>
+<script setup lang="ts"></script>

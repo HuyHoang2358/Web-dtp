@@ -8,6 +8,7 @@ import {
 import store from '@/store';
 import { setDefaultMap, turnOnArea } from '@/DTP_3D/module/map';
 import { setDefaultHandle } from '@/DTP_3D/module/handle';
+import { ROUTE_PHUTT_MYDINH } from '@/DTP_3D/config/data3D';
 
 export async function loadModel(
   start: any,
@@ -67,7 +68,17 @@ async function startSimulationCar(road_data: any, model_AssetID: any) {
 }
 
 function prepareDataForSimulationRoute() {
-  const points = store.getters['ROUTE/getPoints'];
+  const points = [];
+  for (let i = 0; i < ROUTE_PHUTT_MYDINH.length / 2; i++) {
+    const ans = {
+      lng: ROUTE_PHUTT_MYDINH[i * 2],
+      lat: ROUTE_PHUTT_MYDINH[i * 2 + 1],
+      height: 0,
+    };
+    points.push(ans);
+  }
+
+  /*const points = store.getters['ROUTE/getPoints'];*/
   if (points.length == 0) return [];
   const ans = [{ ...points[0], time: 0 }];
   for (let i = 1; i < points.length; i++) {
@@ -83,7 +94,7 @@ function prepareDataForSimulationRoute() {
 export async function simulationRoute() {
   const road_data = prepareDataForSimulationRoute();
   await startSimulationCar(road_data, CAR_MODEL_ASSET_ID);
-  await turnOnArea(
+  /* await turnOnArea(
     {
       id: '2000000000000001212',
       name: 'Thành phố Hà Nội',
@@ -96,7 +107,7 @@ export async function simulationRoute() {
       active: true,
     },
     false,
-  );
+  );*/
 }
 
 export async function stopSimulationRoute() {

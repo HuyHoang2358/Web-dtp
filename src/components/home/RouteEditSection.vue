@@ -128,10 +128,12 @@ import IconCancel from '@/components/icons/IconCancel.vue';
 import { useMapStore } from '@/stores/map';
 import IconAddLayerActive from '@/components/icons/home/IconAddLayerActive.vue';
 import { simulationRoute, stopSimulationRoute, trackingEntity } from '@/DTP_3D/module/simulation';
+import { ROUTE_PHUTT_MYDINH } from '@/DTP_3D/config/data3D';
 const store = useMapStore();
-
+import routeController from '@/services/controller/routeController';
 const showRoute = (routeId: number) => {
   if (routeId === 1) {
+    routeController.onClickRoute(ROUTE_PHUTT_MYDINH);
   }
 };
 </script>

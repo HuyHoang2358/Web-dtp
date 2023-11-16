@@ -1,3 +1,17 @@
+export const POS_TYPES = [
+  {
+    value: '/images/BCA/hospital.png',
+    label: 'Y tế',
+  },
+  {
+    value: '/images/BCA/ca.png',
+    label: 'Công An',
+  },
+  {
+    value: '/images/BCA/hotel.png',
+    label: 'Khách sạn',
+  },
+];
 export const MODEL3D_TYPES = [
   {
     value: 'building',
@@ -83,10 +97,15 @@ export const HOUSE_FUNCTIONS = [
 
 export const LIBRARY_MODELS = [
   {
+    modelId: '630c7610ca15a7711f8fa781',
+    preview_img: 'images/library/preview/630c7610ca15a7711f8fa781.png',
+    type: 'building',
+  },
+  /*{
     modelId: '5b1a5a2e1c21e330bca3ef9d',
     preview_img: '/images/library/preview/5b1a5a2e1c21e330bca3ef9d.png',
     type: 'building',
-  },
+  },*/
   {
     modelId: '5eb8be8e1128d113bc24ab43',
     preview_img: '/images/library/preview/5eb8be8e1128d113bc24ab43.png',

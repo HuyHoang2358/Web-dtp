@@ -1,7 +1,7 @@
 import type { AreaMetaData } from '@/DTP_3D/type/DTP3D.type';
 import { IS_ONLINE } from '@/configs/mainConfig';
 import { MODEL3D_TYPES } from '@/configs/constants';
-import { fetchEntities, fetchEntitiesOffline } from '@/services/apis/entiy';
+import { fetchEntities, fetchEntitiesOffline, fetchEntity } from '@/services/apis/entiy';
 
 export function reFormat(obj: any, is_texture: boolean) {
   if (obj) {
@@ -38,6 +38,17 @@ function reFormatJson(obj: any, is_texture: boolean) {
     return new_obj;
   }
   return null;
+}
+export async function getObjectsById(ids: any) {
+  const ans = [];
+  for (let i = 0; i < ids.length; i++) {
+    const id = ids[i];
+    const res = await fetchEntity(id);
+    const data = reFormat(res.data, true);
+    ans.push(data);
+  }
+
+  return ans;
 }
 export async function getNoTextureObjects(area: AreaMetaData) {
   console.log('getNoTextureObjects', area);

@@ -35,20 +35,23 @@
           v-if="is_modify_position_form"
         >
           <a-row :gutter="[12, 12]">
-            <a-col :span="24">
+            <a-col :span="8"><div class="text-[#bebebe] py-1.5">Tên tòa nhà</div></a-col>
+            <a-col :span="16">
               <a-form-item
-                name="Model ID"
-                label="Model ID"
+                name=""
+                label=""
                 class="mb-1"
               >
                 <a-input
-                  v-model:value="formModel.model_id"
-                  placeholder="Nhập Id model"
+                  v-model:value="formModel.name"
+                  placeholder="Nhập tên tòa nhà"
                   aria-readonly="true"
+                  :onChange="changePinInfo"
                 />
               </a-form-item>
             </a-col>
           </a-row>
+
           <a-row :gutter="[12, 12]">
             <a-col :span="8">
               <a-form-item
@@ -76,7 +79,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="8">
+            <!--            <a-col :span="8">
               <a-form-item
                 name="height"
                 label="Độ cao"
@@ -87,6 +90,15 @@
                   :onChange="changeModelInfo"
                   placeholder="Nhập độ cao"
                 />
+              </a-form-item>
+            </a-col>-->
+            <a-col :span="8">
+              <a-form-item
+                name="height"
+                label="Di chuyển"
+                class="mb-1"
+              >
+                <button @click="libraryController.moveModel">Location</button>
               </a-form-item>
             </a-col>
           </a-row>
@@ -224,6 +236,40 @@
                   :min="0"
                   :max="2"
                   :step="0.01"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row
+            :gutter="[4, 4]"
+            class="mt-2"
+          >
+            <a-col :span="5"><div class="text-[#bebebe] py-1.5">Pin</div></a-col>
+            <a-col :span="6">
+              <a-form-item
+                name="pin_height"
+                label=""
+                class="mb-1"
+              >
+                <a-input
+                  v-model:value="formModel.pin_height"
+                  :onChange="changePinInfo"
+                  placeholder="..."
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="13">
+              <a-form-item
+                name="pin_height"
+                label=""
+                class="mb-0"
+              >
+                <a-slider
+                  v-model:value="formModel.pin_height"
+                  :onChange="changePinInfo"
+                  :min="1"
+                  :max="130"
+                  :step="1"
                 />
               </a-form-item>
             </a-col>
@@ -391,7 +437,7 @@
 import { computed, ComputedRef, h, ref, toRaw } from 'vue';
 import IconCancel from '@/components/icons/IconCancel.vue';
 import { useMapStore } from '@/stores/map';
-import { useUpdateEntity } from '@/services/hooks/useEntity';
+import { useAddEntity, useUpdateEntity } from '@/services/hooks/useEntity';
 import { notification } from 'ant-design-vue';
 import IconCustomDropdown from '@/components/icons/IconCustomDropdown.vue';
 import { HOUSE_FUNCTIONS } from '@/configs/constants';
@@ -425,6 +471,8 @@ interface FormModel {
   name?: string;
   function?: string;
   house_height?: number;
+  pin_height?: number;
+  type: string;
 }
 const formRef = ref();
 
@@ -432,9 +480,13 @@ const is_modify_position_form = ref<boolean>(true);
 const formModel: ComputedRef<FormModel> = computed(() => {
   return editingModelStore.model_info;
 });
-const { mutate } = useUpdateEntity();
+const { mutate } = editingModelStore.isEditing ? useUpdateEntity() : useAddEntity();
 const prepare_edit_data_form = (): any => {
   const data = toRaw(formModel).value;
+  console.log('DATA', data);
+  const arr = data.model_url.split('/');
+  let model_id = arr[arr.length - 1];
+  model_id = model_id.slice(0, -4);
   if (is_modify_position_form.value)
     return {
       id: data.id,
@@ -447,6 +499,9 @@ const prepare_edit_data_form = (): any => {
       roll: data.roll,
       scale: data.scale,
       height: data.height,
+      pin_height: data.pin_height,
+      ten_toa_nha: data.name,
+      modelUrl: model_id,
     };
 
   return {
@@ -457,18 +512,42 @@ const prepare_edit_data_form = (): any => {
     so_tang: data.floor,
     dien_tich: data.area,
     chieu_cao: data.house_height,
-    dia_chi: {
-      commune: data.commune,
-      district: data.district,
-      province: data.province,
-      streetAddress: data.streetAddress,
+    modelUrl: model_id,
+  };
+};
+const prepare_add_data_form = (): any => {
+  const data = toRaw(formModel).value;
+  const arr = data.model_url.split('/');
+  let model_id = arr[arr.length - 1];
+  model_id = model_id.slice(0, -4);
+  return {
+    location: {
+      type: 'Point',
+      coordinates: [data.longitude, data.latitude],
     },
+    dia_chi: {
+      commune: 'Phường Trúc Bạch',
+      district: 'Quận Ba Đình',
+      province: 'Thành phố Hà Nội',
+      streetAddress: '',
+    },
+    heading: data.heading,
+    pitch: data.pitch,
+    roll: data.roll,
+    scale: data.scale,
+    height: data.height,
+    pin_height: data.pin_height,
+    ten_toa_nha: data.name,
+    modelUrl: model_id,
+    type: data.type,
   };
 };
 const onSubmit = () => {
   formRef.value.validate().then(() => {
-    console.log('values', toRaw(formModel));
-    const dataForm = prepare_edit_data_form();
+    const dataForm = editingModelStore.isEditing
+      ? prepare_edit_data_form()
+      : prepare_add_data_form();
+    console.log(dataForm);
     mutate(dataForm, {
       onError: (error: any) => {
         notification.error({ message: error?.response?.data?.msg || error?.message });
@@ -479,6 +558,7 @@ const onSubmit = () => {
     });
     store.changeActiveTool();
   });
+  libraryController.closeAll();
 };
 const validate_number = (x: any) => {
   return !isNaN(parseFloat(x)) && isFinite(x);
@@ -499,11 +579,14 @@ const changeModelInfo = () => {
     libraryController.modifyPositionModelEntity(formModel.value);
   }
 };
+const changePinInfo = () => {
+  libraryController.modifyPinEntity(formModel.value);
+};
 </script>
 
 <style scoped>
 .add-layer-map-container {
   width: 306px;
-  height: 462px;
+  height: 480px;
 }
 </style>

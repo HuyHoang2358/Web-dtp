@@ -9,7 +9,9 @@ import { draw_polygon, drawPolygon, updatePolygonEntity } from '@/DTP_3D/module/
 import { fetchArea } from '@/services/apis/area';
 import { fetchEntity } from '@/services/apis/entiy';
 import { reFormat } from '@/DTP_3D/api/entity';
-
+import libraryController from '@/services/controller/libraryController';
+import { fetchPolice } from '@/services/apis/police';
+import policeController from '@/services/controller/policeController';
 function get_position(movement_position: any) {
   const viewer = getViewer();
   const cartesian = viewer.camera.pickEllipsoid(movement_position, viewer.scene.globe.ellipsoid);
@@ -32,15 +34,14 @@ export function handle_click_object() {
     const pickedFeature = viewer.scene.pick(movement.position);
     if (Cesium.defined(pickedFeature)) {
       // high light selected Entity
-      console.log('pickedFeature', pickedFeature);
-      console.log('id', pickedFeature.id.name);
-      console.log('descriptuon', pickedFeature.id.description.getValue());
-      if (pickedFeature.id.description.getValue() === 'importantArea') {
-        const res = await fetchArea(pickedFeature.id.name);
-        const area = res.data;
-        const res_e = await fetchEntity(area.model_id);
-        const building_entity = reFormat(res_e.data, true);
-        if (building_entity) visualizeModelEntity(building_entity.model);
+      //console.log('pickedFeature', pickedFeature);
+      //console.log('id', pickedFeature.id.name);
+      //console.log('descriptuon', pickedFeature.id.description.getValue());
+      if (pickedFeature.id.description.getValue() === 'police') {
+        const res = await fetchPolice(pickedFeature.id.name);
+        const data = res?.data || null;
+        console.log('data', data);
+        if (data) await policeController.showInfoPolice(data);
       } else {
         const storeMap = useMapStore();
         //const info = getInformationFromEntity(pickedFeature.id);
@@ -49,6 +50,7 @@ export function handle_click_object() {
         const info = {
           id: data.id,
           model_id: data.modelUrl,
+          model_url: data.modelUrl,
           latitude: data.location.coordinates[1],
           longitude: data.location.coordinates[0],
           height: data.height,
@@ -65,11 +67,14 @@ export function handle_click_object() {
           name: data.ten_toa_nha,
           function: data.phan_loai_toa_nha,
           house_height: data.chieu_cao,
+          type: data.type,
+          pin_height: data.pin_height,
         };
-        console.log('info', info);
+        //console.log('info', info);
         updateNameOverlay(res.data, movement.position);
-        await storeMap.changeSelectingModel(info);
-        await storeMap.changeActiveTool(ICON_TOOL_ACTIVE.EDIT_MODEL);
+        //libraryController.editModelEntity(pickedFeature.id, info);
+        //await storeMap.changeActiveTool(ICON_TOOL_ACTIVE.EDIT_MODEL);
+        console.log(pickedFeature.id.name);
         await store.dispatch('VIEWER/setSelectedEntity', pickedFeature.id);
       }
     }
@@ -107,7 +112,7 @@ export async function handle_draw_route() {
       await store.dispatch('ROUTE/addPointEntity', point_entity);
 
       let polyline = store.getters['ROUTE/getPolyline'];
-      console.log(store.getters['ROUTE/getPoints']);
+      //console.log(store.getters['ROUTE/getPoints']);
       if (!polyline) {
         if (store.getters['ROUTE/getPoints'].length >= 2) {
           polyline = drawPolyline(store.getters['ROUTE/getPoints']);
@@ -204,7 +209,7 @@ export async function handle_draw_polygon() {
       await store.dispatch('AREA/addPointEntity', point_entity);
 
       let polygon = store.getters['AREA/getPolygon'];
-      console.log(store.getters['AREA/getPoints']);
+      //console.log(store.getters['AREA/getPoints']);
       if (!polygon) {
         if (store.getters['AREA/getPoints'].length > 2) {
           polygon = drawPolygon(store.getters['AREA/getPoints']);
@@ -236,6 +241,19 @@ export async function handle_move_get_position() {
       };
     }
   }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+  await store.dispatch('VIEWER/pushHandle', move_get_position_handle);
+
+  move_get_position_handle.setInputAction(async function () {
+    await setDefaultHandle();
+  }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
+}
+
+export async function handle_get_positionX() {
+  const viewer = store.getters['VIEWER/getViewer'];
+  const move_get_position_handle = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+  move_get_position_handle.setInputAction(function (movement: any) {
+    console.log('mouse_position', movement);
+  }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
   await store.dispatch('VIEWER/pushHandle', move_get_position_handle);
 
   move_get_position_handle.setInputAction(async function () {

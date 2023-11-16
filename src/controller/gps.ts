@@ -33,14 +33,14 @@ async function visualGPS() {
   console.log('GPS_POINT: ', point);
 }
 function turnOnGPS() {
-  //console.log('turn on');
+  console.log('turn on');
   const IOTStore = useIOTStore();
   IOTStore.isTrackingGPS = true;
   if (IOTStore.isInitFirebase) initFirebase();
   IOTStore.intervalId = setInterval(visualGPS, IOT_INTERVAL_TIME);
 }
 function turnOffGPS() {
-  //console.log('turn OFF');
+  console.log('turn OFF');
   const IOTStore = useIOTStore();
   if (IOTStore.intervalId) clearInterval(IOTStore.intervalId);
   if (IOTStore.gps_entity) removeGPSEntity(IOTStore.gps_entity);
