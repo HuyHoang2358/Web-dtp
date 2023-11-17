@@ -72,8 +72,8 @@ export function handle_click_object() {
         };
         //console.log('info', info);
         updateNameOverlay(res.data, movement.position);
-        //libraryController.editModelEntity(pickedFeature.id, info);
-        //await storeMap.changeActiveTool(ICON_TOOL_ACTIVE.EDIT_MODEL);
+        libraryController.editModelEntity(pickedFeature.id, info);
+        await storeMap.changeActiveTool(ICON_TOOL_ACTIVE.EDIT_MODEL);
         console.log(pickedFeature.id.name);
         await store.dispatch('VIEWER/setSelectedEntity', pickedFeature.id);
       }

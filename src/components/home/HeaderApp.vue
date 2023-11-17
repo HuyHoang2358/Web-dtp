@@ -94,7 +94,7 @@
         <h1
           class="text-[#D0002D] text-center mb-0 font-bold text-base md:text-xl lg:text-3xl whitespace-nowrap font-magistral"
         >
-          Digital Twin
+          TRUNG TÂM ĐIỀU HÀNH THÔNG MINH
         </h1>
       </a-col>
       <a-col :span="7">

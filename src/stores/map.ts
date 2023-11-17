@@ -39,6 +39,7 @@ export const useMapStore = defineStore('map', () => {
     heading: 0,
     scale: 1,
   });
+  const labelEntities = ref([]);
 
   function changeSelectingModel(model: any) {
     selectingModel.value = model;
@@ -56,5 +57,6 @@ export const useMapStore = defineStore('map', () => {
     changeSelectingModel,
     selectingModelInfo,
     selectingModelEntity,
+    labelEntities,
   };
 });

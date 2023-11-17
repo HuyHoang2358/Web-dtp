@@ -26,17 +26,17 @@
               <ButtonTool
                 :name="ICON_TOOL_ACTIVE.LOCATE"
                 title="Xác định vị trí"
-                class="w-8 h-10 p-1 pb-2"
+                class="w-16 h-16 p-1 pb-2"
                 :on-click="flyToPos"
               >
-                <IconGPS />
+                <IconDirect />
               </ButtonTool>
             </div>
             <div>
               <ButtonTool
                 :name="ICON_TOOL_ACTIVE.LOCATE"
                 title="Gọi điện"
-                class="w-8 h-10 p-1 pb-2"
+                class="w-16 h-16 p-1 pb-2"
                 :on-click="() => {}"
               >
                 <IconCall />
@@ -119,6 +119,7 @@ import IconGPS from '@/components/icons/IconGPS.vue';
 import IconCall from '@/components/icons/IconCall.vue';
 import IconMes from '@/components/icons/IconMes.vue';
 import { flyTo } from '@/DTP_3D/module/camera';
+import IconDirect from '@/components/icons/IconDirect.vue';
 const store = useMapStore();
 
 const item = ref(store.policeDetailInfo);
@@ -140,7 +141,7 @@ const flyToPos = () => {
 <style scoped>
 .add-layer-map-container {
   width: 306px;
-  height: 462px;
+  height: 495px;
 }
 
 .ant-dropdown .ant-dropdown-menu,

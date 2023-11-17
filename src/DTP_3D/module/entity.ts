@@ -5,7 +5,15 @@ import store from '@/store';
 import { draw_polygon } from '@/DTP_3D/module/polygon';
 import { handle_move_get_position } from '@/DTP_3D/module/handle';
 import type { ModelEntityInfo } from '@/DTP_3D/type/DTP3D.type';
+import { SHOW_PIN_BUILDINGS } from '@/DTP_3D/config/data3D';
+import { addLabelEntity } from '@/DTP_3D/module/entity/label';
 
+function is_showPin(building_id) {
+  for (let i = 0; i < SHOW_PIN_BUILDINGS.length; i++) {
+    if (building_id === SHOW_PIN_BUILDINGS[i]) return true;
+  }
+  return false;
+}
 export function changeHeightTileset(tileset: any, heightOffset: any) {
   const boundingSphere = tileset.boundingSphere;
   const cartographic = Cesium.Cartographic.fromCartesian(boundingSphere.center);
@@ -74,8 +82,15 @@ export function visualizeModelEntity(model: any) {
     model.pitch,
     model.roll,
   );
-  if (model.footprint) {
+  /*  if (model.footprint) {
     draw_polygon(model.footprint);
+  }*/
+  if (is_showPin(model.model_id)) {
+    addLabelEntity(model.name, {
+      lat: model.latitude,
+      lng: model.longitude,
+      height: model.pin_height,
+    });
   }
   return viewer.entities.add({
     name: model.model_id,

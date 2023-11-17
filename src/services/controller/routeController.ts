@@ -14,6 +14,7 @@ export default {
     console.log('OBJS', objs);
     for (const obj of objs) {
       const entity = visualizeModelEntity(obj.model);
+
       await store.dispatch('VIEWER/pushEntity', { info: obj, entity: entity });
     }
   },

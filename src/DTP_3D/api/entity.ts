@@ -19,6 +19,8 @@ export function reFormat(obj: any, is_texture: boolean) {
         heading: obj.heading,
         pitch: obj.pitch,
         roll: obj.roll,
+        name: obj.ten_toa_nha,
+        pin_height: obj.pin_height + 50,
       },
       type: obj.type,
     };

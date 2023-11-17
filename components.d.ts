@@ -60,6 +60,7 @@ declare module 'vue' {
     IconCommunity: typeof import('./src/components/icons/IconCommunity.vue')['default']
     IconCustomDropdown: typeof import('./src/components/icons/IconCustomDropdown.vue')['default']
     IconDatePicker: typeof import('./src/components/icons/IconDatePicker.vue')['default']
+    IconDirect: typeof import('./src/components/icons/IconDirect.vue')['default']
     IconDocumentation: typeof import('./src/components/icons/IconDocumentation.vue')['default']
     IconDropdownLarger: typeof import('./src/components/icons/IconDropdownLarger.vue')['default']
     IconDropdownSmall: typeof import('./src/components/icons/IconDropdownSmall.vue')['default']

@@ -268,7 +268,7 @@
                   v-model:value="formModel.pin_height"
                   :onChange="changePinInfo"
                   :min="1"
-                  :max="130"
+                  :max="500"
                   :step="1"
                 />
               </a-form-item>
@@ -587,6 +587,6 @@ const changePinInfo = () => {
 <style scoped>
 .add-layer-map-container {
   width: 306px;
-  height: 480px;
+  height: 495px;
 }
 </style>

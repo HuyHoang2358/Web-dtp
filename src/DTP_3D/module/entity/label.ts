@@ -9,11 +9,11 @@ export function addLabelEntity(text: string, position: Point) {
     label: {
       text: text,
       scaleByDistance: new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5),
-      font: '11px Times New Roman',
+      font: '6px Times New Roman',
       fillColor: Cesium.Color.WHITE,
       backgroundColor: Cesium.Color.RED.withAlpha(0.8),
       distanceDisplayCondition: 5000,
-      height: 100,
+      height: 30,
     },
   });
   label_entity.label.showBackground = true;

@@ -42,3 +42,4 @@ export const WEB_API_POLICES = '/dtp/force/get-all';
 export const WEB_API_POLICE = '/dtp/force/';
 
 export const WEB_API_ROIS = '/focus-location/get-all';
+export const WEB_API_ADD_ROI = '/focus-location/';

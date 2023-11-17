@@ -104,7 +104,10 @@
             </button>
           </a-col>
           <a-col :span="12">
-            <button class="w-full bg-[#353535] text-white border-0 rounded py-2 hover:text-red-600">
+            <button
+              class="w-full bg-[#353535] text-white border-0 rounded py-2 hover:text-red-600"
+              @click="botrilucluong()"
+            >
               Bố trí lực lượng
             </button>
           </a-col>
@@ -132,6 +135,7 @@ import { useAddImportantArea, useImportantAreas } from '@/services/hooks/useArea
 import { notification } from 'ant-design-vue';
 import { drawFootprintImportantAreas, stopDrawImportantArea } from '@/DTP_3D/module/importantArea';
 import { fetchImportantAreas } from '@/services/apis/area';
+import policeController from '@/services/controller/policeController';
 
 const storeM = useMapStore();
 const is_add_important_position_form = ref<boolean>(false);
@@ -188,11 +192,10 @@ const addImportantForm = () => {
   handle_draw_polygon();
 };
 
-/*const { data: areas } = useImportantAreas();
-const importantAreas: ComputedRef = computed(() => {
-  console.log(areas);
-  return areas.value?.data?.data || [];
-});*/
+const botrilucluong = () => {
+  console.log('botrill');
+  policeController.turnOnPolice();
+};
 
 const showImportantAreas = async () => {
   const res = await fetchImportantAreas();
@@ -206,6 +209,6 @@ const showImportantAreas = async () => {
 <style scoped>
 .add-layer-map-container {
   width: 306px;
-  height: 462px;
+  height: 495px;
 }
 </style>

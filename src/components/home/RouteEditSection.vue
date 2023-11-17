@@ -104,7 +104,10 @@
             </button>
           </a-col>
           <a-col :span="12">
-            <button class="w-full bg-[#353535] text-white border-0 rounded py-2 hover:text-red-600">
+            <button
+              class="w-full bg-[#353535] text-white border-0 rounded py-2 hover:text-red-600"
+              @click="botrilucluong()"
+            >
               Bố trí lực lượng
             </button>
           </a-col>
@@ -131,16 +134,22 @@ import { simulationRoute, stopSimulationRoute, trackingEntity } from '@/DTP_3D/m
 import { ROUTE_PHUTT_MYDINH } from '@/DTP_3D/config/data3D';
 const store = useMapStore();
 import routeController from '@/services/controller/routeController';
+import policeController from '@/services/controller/policeController';
+import posController from '@/services/controller/posController';
 const showRoute = (routeId: number) => {
   if (routeId === 1) {
     routeController.onClickRoute(ROUTE_PHUTT_MYDINH);
   }
+};
+const botrilucluong = () => {
+  policeController.turnOnPolice();
+  posController.turnOnPosition();
 };
 </script>
 
 <style scoped>
 .add-layer-map-container {
   width: 306px;
-  height: 462px;
+  height: 495px;
 }
 </style>

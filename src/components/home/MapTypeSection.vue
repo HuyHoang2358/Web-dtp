@@ -166,7 +166,7 @@ const areas: ComputedRef = computed(() => {
 <style scoped>
 .add-layer-map-container {
   width: 306px;
-  height: 462px;
+  height: 495px;
 }
 
 .ant-dropdown .ant-dropdown-menu,
