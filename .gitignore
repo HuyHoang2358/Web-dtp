@@ -13,7 +13,6 @@ dist
 dist-ssr
 coverage
 *.local
-/public/data3D/*
 /cypress/videos/
 /cypress/screenshots/
 
@@ -30,4 +29,5 @@ coverage
 test-results/
 playwright-report/
 
-public/data3D/
+public/data3D/*
+
