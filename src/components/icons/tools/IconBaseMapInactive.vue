@@ -52,4 +52,4 @@
     />
   </svg>
 </template>
-<script setup></script>
+

@@ -7,6 +7,7 @@ import { handle_move_get_position } from '@/DTP_3D/module/handle';
 import type { ModelEntityInfo } from '@/DTP_3D/type/DTP3D.type';
 import { SHOW_PIN_BUILDINGS } from '@/DTP_3D/config/data3D';
 import { addLabelEntity } from '@/DTP_3D/module/entity/label';
+import { DOMAIN_GLB_STORAGE } from '@/configs/constants';
 
 function is_showPin(building_id) {
   for (let i = 0; i < SHOW_PIN_BUILDINGS.length; i++) {
@@ -69,7 +70,7 @@ function prepare_position(
 
 export function prepare_model_url(model_id: string, is_texture = false) {
   let domain = '';
-  domain = is_texture ? '/data3D/gltf/glb_texture/' : '/data3D/gltf/glb/';
+  domain = is_texture ? '/data3D/gltf/texture/' : '/data3D/gltf/glb/';
   return `${domain}${model_id}.glb`;
 }
 export function visualizeModelEntity(model: any) {
@@ -100,6 +101,31 @@ export function visualizeModelEntity(model: any) {
     model: {
       uri: model.model_url,
       scale: model.scale,
+    },
+  });
+}
+
+
+// TODO: This function is visualize city Object in viewer
+export function visualizeCityObj(obj: any) {
+  const viewer = getViewer();
+  const position_info = prepare_position(
+    obj.position.longitude,
+    obj.position.latitude,
+    obj.position.height,
+    obj.city_model.heading,
+    obj.city_model.pitch,
+    obj.city_model.roll,
+  );
+
+  return viewer.entities.add({
+    name: obj.id,
+    description: 'building',
+    position: position_info.position,
+    orientation: position_info.orientation,
+    model: {
+      uri: DOMAIN_GLB_STORAGE + obj.city_model.texture_model_url,
+      scale:  obj.city_model.scale,
     },
   });
 }
@@ -200,6 +226,7 @@ export function updateModelEntity(model_entity: any, model_info: ModelEntityInfo
   model_entity.orientation = position_info.orientation;
   model_entity.model.scale = model_info.scale;
 }
+
 export function addModelEntity(model: ModelEntityInfo) {
   const viewer = getViewer();
   const position_info = prepare_position(
@@ -221,6 +248,7 @@ export function addModelEntity(model: ModelEntityInfo) {
     },
   });
 }
+
 export function removeEntity(entity) {
   const viewer = getViewer();
   if (entity) viewer.entities.remove(entity);

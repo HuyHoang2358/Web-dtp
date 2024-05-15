@@ -71,6 +71,7 @@ export default {
     const viewer = getViewer();
     const objs = await getObjectsById(BUILDINGS_SNIPER);
     console.log('OBJS', objs);
+
     for (const obj of objs) {
       const entity = visualizeModelEntity(obj.model);
       await store.dispatch('VIEWER/pushEntity', { info: obj, entity: entity });

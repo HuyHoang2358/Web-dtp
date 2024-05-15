@@ -1,7 +1,5 @@
 import type { AreaMetaData } from '@/DTP_3D/type/DTP3D.type';
-import { IS_ONLINE } from '@/configs/mainConfig';
-import { MODEL3D_TYPES } from '@/configs/constants';
-import { fetchEntities, fetchEntitiesOffline, fetchEntity } from '@/services/apis/entiy';
+import { fetchEntities, fetchEntity } from '@/services/apis/entiy';
 
 export function reFormat(obj: any, is_texture: boolean) {
   if (obj) {
@@ -52,45 +50,11 @@ export async function getObjectsById(ids: any) {
 
   return ans;
 }
-export async function getNoTextureObjects(area: AreaMetaData) {
-  console.log('getNoTextureObjects', area);
-  const entities = [];
-  if (IS_ONLINE) {
-    for (const type of MODEL3D_TYPES) {
-      const res = await fetchEntities({ type: type.value, province: area.name });
-      if (res.data.length > 0) {
-        for (let i = 0; i <= res.data.length; i++) {
-          const new_data = reFormat(res.data[i], false);
-          if (new_data !== null) entities.push(new_data);
-        }
-      }
-    }
-  } else {
-    for (const type of MODEL3D_TYPES) {
-      const objs = await fetchEntitiesOffline(area.slug, type.value);
-      objs.forEach((obj) => {
-        const new_data = reFormatJson(obj, false);
-        if (new_data) entities.push(new_data);
-      });
-    }
-  }
 
-  return entities;
-}
-
-export async function getTextureObjects(area: AreaMetaData) {
+export async function getCityObjects(area: AreaMetaData) {
   console.log('getTextureObjects', area);
-  const entities = [];
-  if (IS_ONLINE) {
-    for (const type of MODEL3D_TYPES) {
-      const res = await fetchEntities({ type: type.value, province: area.name });
-      if (res.data.length > 0) {
-        for (let i = 0; i <= res.data.length; i++) {
-          const new_data = reFormat(res.data[i], true);
-          if (new_data !== null) entities.push(new_data);
-        }
-      }
-    }
-  }
-  return entities;
+  const res = await fetchEntities(area.slug);
+  console.log("res", res.data);
+  //const is_texture = !area.type_key.contains('NO_TEXTURE');
+  return res?.data;
 }

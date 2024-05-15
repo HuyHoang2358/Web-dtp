@@ -1,6 +1,6 @@
 import * as Cesium from 'cesium';
 
-import { getViewer } from '@/DTP_3D/lib/common';
+import { getCesiumColor, getViewer } from '@/DTP_3D/lib/common';
 import {
   ROUTE_COLOR,
   ROUTE_POINT_COLOR,
@@ -58,3 +58,20 @@ export function addRouteEntity(points: any) {
     },
   });
 }
+
+
+export function addPolylineEntity(points: any, color:string ) {
+  const viewer = getViewer();
+  const positions = preparePositions(points);
+  return viewer.entities.add({
+    name: 'Route',
+    polyline: {
+      positions: Cesium.Cartesian3.fromDegreesArray(positions),
+      width: ROUTE_WIDTH,
+      material: getCesiumColor(color),
+      clampToGround: true,
+    },
+  });
+}
+
+

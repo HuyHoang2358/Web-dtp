@@ -52,4 +52,4 @@ export const ROUTE_COLOR = Cesium.Color.GREEN;
 export const ROUTE_POINT_SIZE = 10;
 export const ROUTE_POINT_COLOR = Cesium.Color.RED.withAlpha(1);
 export const CAR_MODEL_ASSET_ID = 1555070;
-export const CAR_AVERAGE_SPEED = 40;
+export const CAR_AVERAGE_SPEED = 70;

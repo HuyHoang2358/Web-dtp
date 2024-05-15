@@ -1,10 +1,11 @@
 export const FIREBASE_CONFIG = {
-  apiKey: 'AIzaSyBoT9F9Y6FulzOtJ23zlWbJRz3ps98KOUE',
-  authDomain: 'tracking-location-5d973.firebaseapp.com',
-  projectId: 'tracking-location-5d973',
-  storageBucket: 'tracking-location-5d973.appspot.com',
-  messagingSenderId: '1084050160983',
-  appId: '1:1084050160983:web:9f3fe7a7e13aa4cae31212',
-  measurementId: 'G-7B1ZLQ3VRD',
+  apiKey: "AIzaSyC283_mbc3iuG9nkD0reGXxT80BdMcV92g",
+  authDomain: "demok01-e6355.firebaseapp.com",
+  databaseURL: "https://demok01-e6355-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "demok01-e6355",
+  storageBucket: "demok01-e6355.appspot.com",
+  messagingSenderId: "154588528737",
+  appId: "1:154588528737:web:6290ce91710c312f3dea20",
+  measurementId: "G-DLCTCD6NMS"
 };
 export const IOT_INTERVAL_TIME = 1000;

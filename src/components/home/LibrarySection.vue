@@ -16,7 +16,7 @@
         <a-select
           v-model:value="model3D_type"
           placeholder="Chọn"
-          :options="MODEL3D_TYPES"
+          :options="object_categories"
           class="w-[90%]"
         >
           <template #suffixIcon>
@@ -67,7 +67,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { computed, ComputedRef, h, ref } from 'vue';
+import { computed, type ComputedRef, h, ref } from 'vue';
 import IconCancel from '@/components/icons/IconCancel.vue';
 import IconAddLayer from '@/components/icons/home/IconAddLayer.vue';
 
@@ -76,9 +76,11 @@ import IconAddLayerActive from '@/components/icons/home/IconAddLayerActive.vue';
 
 import IconEmpty from '@/components/icons/home/IconEmpty.vue';
 
-import { LIBRARY_MODELS, MODEL3D_TYPES } from '@/configs/constants';
+import { LIBRARY_MODELS } from '@/configs/constants';
 import IconCustomDropdown from '@/components/icons/IconCustomDropdown.vue';
 import libraryController from '@/services/controller/libraryController';
+import { useObjectCategories } from '@/services/hooks/useObjectCategory';
+
 
 const store = useMapStore();
 
@@ -86,13 +88,31 @@ const model3D_type = ref<string>('building');
 
 const showModalAddLayer = ref(false);
 
+// TODO: Get object categories from API
+const { data } = useObjectCategories();
+const object_categories = computed(()=>{
+  const object_categories = data?.value?.data.map((item:any) => {
+    return {
+      label: item.name,
+      value: item.slug,
+    };
+  });
+  console.log("object_categories", object_categories);
+  return object_categories;
+});
+
+// TODO: handle when model3D_type change => get sample models
 const sample_models: ComputedRef = computed(() => {
   if (model3D_type.value === '') return [];
   return LIBRARY_MODELS.filter((e) => e.type === model3D_type.value);
 });
+
 const addModel = (item: any) => {
-  libraryController.addModel(item);
+  //libraryController.addModel(item);
+  libraryController.addCityObject(item);
 };
+
+
 </script>
 
 <style scoped>

@@ -10,6 +10,7 @@ import {
   updateHeightLabelEntity,
   updateLabelEntity,
 } from '@/DTP_3D/module/entity/label';
+import { DOMAIN_GLB_STORAGE } from '@/configs/constants';
 
 export type LibraryItem = {
   modelId: string;
@@ -46,6 +47,38 @@ export default {
   async moveModel() {
     await changePositionModelHandle();
   },
+  async addCityObject(libraryItem: LibraryItem) {
+    const editingModelStore = useEditingModel();
+    editingModelStore.model_info = {
+      name: "",
+      description: "",
+      city_id: "ha_noi",
+      address: "",
+
+      latitude: 0,
+      longitude: 0,
+      height: 0,
+
+      model_code: libraryItem.modelId,
+      model_url: `${DOMAIN_GLB_STORAGE}texture/${libraryItem.modelId}.glb`,
+      scale:1,
+      heading: 0,
+      pitch: 0,
+      roll: 0,
+      type: libraryItem.type,
+      is_show_name: 0,
+      name_height: 30,
+    }
+    console.log("model_info", editingModelStore.model_info)
+    editingModelStore.model_entity = addModelEntity(editingModelStore.model_info);
+    editingModelStore.isOpen = true;
+    editingModelStore.isEditing = false;
+
+    const mapStore = useMapStore();
+    mapStore.iconToolActive = ICON_TOOL_ACTIVE.EDIT_MODEL;
+    await this.moveModel();
+  },
+
   async addModel(libraryItem: LibraryItem) {
     const editingModelStore = useEditingModel();
     editingModelStore.model_info = {

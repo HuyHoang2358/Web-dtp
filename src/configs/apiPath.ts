@@ -38,8 +38,18 @@ export const WEB_API_IMPORTANT_AREAS = '/dtp/important-location/get-all';
 export const WEB_API_IMPORTANT_AREA = '/dtp/important-location/';
 
 export const WEB_API_ADD_POLICE = '/dtp/force/add';
-export const WEB_API_POLICES = '/dtp/force/get-all';
+export const WEB_API_POLICES = 'users/';
 export const WEB_API_POLICE = '/dtp/force/';
 
 export const WEB_API_ROIS = '/focus-location/get-all';
 export const WEB_API_ADD_ROI = '/focus-location/';
+
+
+export const WEB_API_PING = 'ping/'
+export const WEB_API_ROUTE_PUBLISH = 'route/publish/'
+export const WEB_API_CITY_OBJECTS = 'city-objects/'
+export const WEB_API_OBJECT_CATEGORIES = 'object-categories/'
+export const WEB_API_TASKS = 'tasks/'
+export const WEB_API_LOCATION_CATEGORIES = 'location-categories/'
+export const WEB_API_TASK_TARGET_RECONNAISSANCE_ADD = 'tasks/target-reconnaissance/add/'
+export const WEB_API_TASK_TARGET_RECONNAISSANCE_DELETE = 'tasks/target-reconnaissance/delete/'

@@ -12,6 +12,7 @@ export const POS_TYPES = [
     label: 'Khách sạn',
   },
 ];
+/*
 export const MODEL3D_TYPES = [
   {
     value: 'building',
@@ -75,6 +76,7 @@ export const MODEL3D_TYPES = [
     label: 'Bãi đỗ xe',
   },
 ];
+*/
 
 export const HOUSE_FUNCTIONS = [
   {
@@ -214,3 +216,5 @@ export const LIBRARY_MODELS = [
     type: 'vehicle',
   },
 ];
+
+export const DOMAIN_GLB_STORAGE = "/data3D/gltf/"

@@ -1,4 +1,4 @@
-import { getViewer } from '@/DTP_3D/lib/common';
+import { getCesiumColor, getViewer } from '@/DTP_3D/lib/common';
 import * as Cesium from 'cesium';
 
 export function addPinByIcon(pos: any, name: string, status = true) {
@@ -17,22 +17,24 @@ export function addPinByIcon(pos: any, name: string, status = true) {
     },
   });
 }
-export function createPinPosition(pos: any, name: string, iconId: string, colorId: number) {
+export function createPinPosition(pos: any, pin:any) {
   const viewer = getViewer();
-  const colors = [Cesium.Color.GREEN, Cesium.Color.RED, Cesium.Color.YELLOW];
   const pinBuilder = new Cesium.PinBuilder();
-  const url = Cesium.buildModuleUrl('Assets/Textures/maki/' + iconId);
+  const url = Cesium.buildModuleUrl('Assets/Textures/maki/' + pin.cesium_icon + '.png');
   return viewer.entities.add({
-    name: name,
+    name: "important-area",
     description: 'important-area',
     position: Cesium.Cartesian3.fromDegrees(pos.lng, pos.lat),
     billboard: {
-      image: pinBuilder.fromUrl(url, colors[colorId], 48),
+      image: pinBuilder.fromUrl(url, getCesiumColor(pin.color), 48),
       verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
     },
   });
 }
 
-export function updatePinNewPosition(pinEntity: any, newPos: any) {
+export function updatePinNewPosition(pinEntity: any, newPos: any, pin:any) {
   pinEntity.position = Cesium.Cartesian3.fromDegrees(newPos.lng, newPos.lat);
+  const url = Cesium.buildModuleUrl('Assets/Textures/maki/' + pin.cesium_icon + '.png');
+  const pinBuilder = new Cesium.PinBuilder();
+  pinEntity.billboard.image =  pinBuilder.fromUrl(url, getCesiumColor(pin.color), 48);
 }

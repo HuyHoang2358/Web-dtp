@@ -79,26 +79,13 @@
                 />
               </a-form-item>
             </a-col>
-            <!--            <a-col :span="8">
-              <a-form-item
-                name="height"
-                label="Độ cao"
-                class="mb-1"
-              >
-                <a-input
-                  v-model:value="formModel.height"
-                  :onChange="changeModelInfo"
-                  placeholder="Nhập độ cao"
-                />
-              </a-form-item>
-            </a-col>-->
             <a-col :span="8">
               <a-form-item
                 name="height"
                 label="Di chuyển"
                 class="mb-1"
               >
-                <button @click="libraryController.moveModel">Location</button>
+                <button @click="libraryController.moveModel">Định vị</button>
               </a-form-item>
             </a-col>
           </a-row>
@@ -252,8 +239,8 @@
                 class="mb-1"
               >
                 <a-input
-                  v-model:value="formModel.pin_height"
-                  :onChange="changePinInfo"
+                  v-model:value="formModel.height"
+                  :onChange="changeModelInfo"
                   placeholder="..."
                 />
               </a-form-item>
@@ -265,10 +252,10 @@
                 class="mb-0"
               >
                 <a-slider
-                  v-model:value="formModel.pin_height"
-                  :onChange="changePinInfo"
-                  :min="1"
-                  :max="500"
+                  v-model:value="formModel.height"
+                  :onChange="changeModelInfo"
+                  :min="-50"
+                  :max="50"
                   :step="1"
                 />
               </a-form-item>

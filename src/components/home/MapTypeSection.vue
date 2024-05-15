@@ -108,51 +108,26 @@
           Không có dữ liệu
         </a-typography-text>
       </div>
-
-      <a-button
-        class="group flex justify-center items-center bg-[#222222] border border-dashed border-[#86001D] text-sm text-[#BBBBBB] m-4 mt-3"
-        @click="showModalAddLayer = true"
-      >
-        <IconAddLayer class="mr-1.5 group-hover:hidden block" />
-        <IconAddLayerActive class="mr-1.5 hidden group-hover:block" />
-        Thêm mới lớp bản đồ
-      </a-button>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { computed, ComputedRef, h, ref } from 'vue';
-import IconCancel from '@/components/icons/IconCancel.vue';
-import IconAddLayer from '@/components/icons/home/IconAddLayer.vue';
-
+import { computed, type ComputedRef, h, ref } from 'vue';
 import { useMapStore } from '@/stores/map';
+
+import IconCancel from '@/components/icons/IconCancel.vue';
 import IconSearchInput from '@/components/icons/home/IconSearchInput.vue';
-
-import IconAddLayerActive from '@/components/icons/home/IconAddLayerActive.vue';
-
 import IconEmpty from '@/components/icons/home/IconEmpty.vue';
 
 import { MAP_TYPES, AREAS } from '@/DTP_3D/config/MapConfig';
 import IconThreeDot from '@/components/icons/IconThreeDot.vue';
-import { changeBaseMap, turnOnArea } from '@/DTP_3D/module/map';
+import { turnOnArea } from '@/DTP_3D/module/map';
 import IconPublic from '@/components/icons/home/IconPublic.vue';
-import { HANOI_CENTER_POINT } from '@/DTP_3D/config/mainConfig';
 
 const store = useMapStore();
 const activeIndexTab = ref<string>('3D_NO_TEXTURE');
-const activeId = ref<string>('');
 const searchValue = ref<string>('');
 
-const showModalAddLayer = ref(false);
-
-const onClickItem = (basemapLayer: any) => {
-  activeId.value = basemapLayer.id;
-  changeBaseMap(basemapLayer);
-};
-
-/*watch(activeIndexTab, () => {
-  console.log(activeIndexTab);
-});*/
 const onClickArea = (area: any) => {
   turnOnArea(area);
 };

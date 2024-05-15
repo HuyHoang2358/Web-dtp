@@ -22,6 +22,8 @@ export interface UserResType {
   items: Item[];
 }
 
+
+
 export interface Item {
   createdDate: string;
   updatedDate: string;

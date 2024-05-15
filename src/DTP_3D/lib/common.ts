@@ -1,6 +1,7 @@
 import store from '@/store';
 import type { Point } from '@/DTP_3D/type/DTP3D.type';
 import * as Cesium from 'cesium';
+import type { PointLocation } from '@/Types';
 
 export function formatTimeNumber(num: number) {
   return String(num).padStart(2, '0');
@@ -44,4 +45,32 @@ export function get_position(movement_position: any) {
     };
   }
   return null;
+}
+
+
+// TODO: Merger PointLocation into array of number
+export function mergerPointIntoArray(points: PointLocation[]) :number[] {
+  const reformatedPoints:number[] = []
+  points.forEach((point: PointLocation) => {
+    reformatedPoints.push(point.longitude);
+    reformatedPoints.push(point.latitude);
+  });
+  return reformatedPoints;
+}
+// TODO: Get cesium color
+export function getCesiumColor(color: string) {
+  switch (color) {
+    case 'red':
+      return Cesium.Color.RED;
+    case 'green':
+      return Cesium.Color.GREEN;
+    case 'blue':
+      return Cesium.Color.BLUE;
+    case 'yellow':
+      return Cesium.Color.YELLOW;
+    case 'orange':
+      return Cesium.Color.ORANGE;
+    default:
+      return Cesium.Color.WHITE;
+  }
 }

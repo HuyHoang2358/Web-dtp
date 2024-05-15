@@ -1,4 +1,4 @@
-import { WEB_API_ENTITY, WEB_API_GET_ENTITIES, WEB_API_UPDATE_ENTITY } from '@/configs/apiPath';
+import { WEB_API_CITY_OBJECTS, WEB_API_ENTITY, WEB_API_GET_ENTITIES, WEB_API_UPDATE_ENTITY } from '@/configs/apiPath';
 import type { EntityRequestParams } from '@/services/commonTypes';
 import clientWebApi from '@/services/clientWebApi';
 import axios from 'axios';
@@ -24,8 +24,8 @@ const getIds = async (txt_file: string) => {
     return [];
   }
 };
-export const fetchEntities = (params: EntityRequestParams) =>
-  clientWebApi.get(WEB_API_GET_ENTITIES, { params });
+export const fetchEntities = (city_id:string) =>
+  clientWebApi.get(WEB_API_CITY_OBJECTS + city_id);
 
 export const fetchEntitiesOffline = async (slug: string, type: string) => {
   const url = '/data3D/gltf/ids/' + slug + '_' + type + '_ids.txt';

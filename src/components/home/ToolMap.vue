@@ -1,7 +1,9 @@
 <template>
   <div class="flex top-40 items-center left-4 absolute z-50">
     <div class="w-10">
+      <!-- List 1 -->
       <div class="flex flex-col items-center w-10 bg-[#151515] bg-opacity-90 rounded-sm">
+
         <ButtonTool
           title="Lớp bản đồ"
           :on-click="onClickIcon"
@@ -10,6 +12,7 @@
           <IconLayerActive v-if="store.iconToolActive === ICON_TOOL_ACTIVE.LAYER" />
           <IconLayerInactive v-else />
         </ButtonTool>
+
         <a-divider class="h-px m-0 bg-[#333333]" />
         <ButtonTool
           title="Khu vực đã lưu"
@@ -18,26 +21,22 @@
         >
           <IconBookmark />
         </ButtonTool>
+
         <a-divider class="h-px m-0 bg-[#333333]" />
         <ButtonTool
           :on-click="onClickIcon"
           :name="ICON_TOOL_ACTIVE.MODEL"
-          title="Đối tượng 3D"
+          title="Thư viện mô hình 3D"
         >
           <Icon3DModel />
         </ButtonTool>
-        <a-divider class="h-px m-0 bg-[#333333]" />
-        <ButtonTool
-          :on-click="onClickIcon"
-          :name="ICON_TOOL_ACTIVE.IMPORTANT_LOCAL"
-          title="Ghim Vị trí"
-        >
-          <IconImportantPosActive
-            v-if="store.iconToolActive === ICON_TOOL_ACTIVE.IMPORTANT_LOCAL"
-          />
-          <IconImportantPos v-else />
-        </ButtonTool>
+
+
+
+
       </div>
+
+      <!-- List 2 -->
       <div class="flex flex-col items-center w-10 bg-[#151515] bg-opacity-90 rounded-sm mt-2">
         <ButtonTool
           :on-click="onClickIcon"
@@ -54,14 +53,14 @@
         >
           <IconZoomOut />
         </ButtonTool>
-        <a-divider class="h-px m-0 bg-[#333333]" />
+<!--        <a-divider class="h-px m-0 bg-[#333333]" />
         <ButtonTool
           :name="ICON_TOOL_ACTIVE.SEARCH"
           :on-click="onClickIcon"
           title="Tìm kiếm"
         >
           <IconSearch />
-        </ButtonTool>
+        </ButtonTool>-->
         <a-divider class="h-px m-0 bg-[#333333]" />
         <ButtonTool
           :name="ICON_TOOL_ACTIVE.FULL_SCREEN"
@@ -71,7 +70,32 @@
           <IconFullScreen />
         </ButtonTool>
       </div>
+
+      <!-- List 3 -->
       <div class="flex flex-col items-center w-10 bg-[#151515] rounded-sm bg-opacity-90 mt-2">
+
+        <ButtonTool
+          :name="ICON_TOOL_ACTIVE.TASK"
+          :on-click="onClickIcon"
+          title="Danh sách nhiệm vụ"
+        >
+          <IconTaskActive v-if="store.iconToolActive === ICON_TOOL_ACTIVE.TASK" />
+          <IconTask v-else />
+        </ButtonTool>
+        <a-divider class="h-px m-0 bg-[#333333]" />
+
+        <a-divider class="h-px m-0 bg-[#333333]" />
+        <ButtonTool
+          :on-click="onClickIcon"
+          :name="ICON_TOOL_ACTIVE.IMPORTANT_LOCAL"
+          title="Vị trí trinh sát"
+        >
+          <IconImportantPosActive
+            v-if="store.iconToolActive === ICON_TOOL_ACTIVE.IMPORTANT_LOCAL"
+          />
+          <IconImportantPos v-else />
+        </ButtonTool>
+
         <ButtonTool
           :name="ICON_TOOL_ACTIVE.POLYGON"
           :on-click="onClickIcon"
@@ -100,7 +124,7 @@
         <ButtonTool
           :name="ICON_TOOL_ACTIVE.SNIPER"
           :on-click="onClickIcon"
-          title="Kiểm tra bắn tỉa"
+          title="Trinh sát không gian"
         >
           <IconSniperActive v-if="store.iconToolActive === ICON_TOOL_ACTIVE.SNIPER" />
           <IconSniper v-else />
@@ -124,6 +148,9 @@
     <SniperSection v-if="store.iconToolActive === ICON_TOOL_ACTIVE.SNIPER" />
     <RouteEditSection v-if="store.iconToolActive === ICON_TOOL_ACTIVE.POLYGON" />
     <ImportantAreaSection v-if="store.iconToolActive === ICON_TOOL_ACTIVE.MEASURING_HORIZONTAL" />
+
+    <TaskSection v-if="store.iconToolActive === ICON_TOOL_ACTIVE.TASK" />
+
     <PoliceSection v-if="store.iconToolActive === ICON_TOOL_ACTIVE.POLICE" />
     <PoliceDetailSection
       v-if="store.iconToolActive === ICON_TOOL_ACTIVE.POLICE && store.policeDetail"
@@ -135,18 +162,11 @@
 <script setup lang="ts">
 import IconZoomIn from '@/components/icons/tools/IconZoomIn.vue';
 import IconZoomOut from '@/components/icons/tools/IconZoomOut.vue';
-import IconSearch from '@/components/icons/tools/IconSearch.vue';
 import IconFullScreen from '@/components/icons/tools/IconFullScreen.vue';
-import IconPolygon from '@/components/icons/tools/IconPolygon.vue';
-import IconRuler from '@/components/icons/tools/IconRuler.vue';
 import ButtonTool from '@/components/home/ButtonTool.vue';
 import { ICON_TOOL_ACTIVE } from '@/configs/enums';
-import IconMeasuringHorizontal from '@/components/icons/tools/IconMeasuringHorizontal.vue';
 import LayerMapSection from '@/components/home/LayerMapSection.vue';
-import IconPolygonActive from '@/components/icons/tools/IconPolygonActive.vue';
 import { useMapStore } from '@/stores/map';
-import IconMeasuringHorizontalActive from '@/components/icons/tools/IconMeasuringHorizontalActive.vue';
-import IconRulerActive from '@/components/icons/tools/IconRulerActive.vue';
 
 import IconLayerActive from '@/components/icons/tools/IconLayerActive.vue';
 import IconLayerInactive from '@/components/icons/tools/IconLayerInactive.vue';
@@ -157,7 +177,6 @@ import Icon3DModel from '@/components/icons/Icon3DModel.vue';
 import MapTypeSection from '@/components/home/MapTypeSection.vue';
 import LibrarySection from '@/components/home/LibrarySection.vue';
 import ModelEditSection from '@/components/home/ModelEditSection.vue';
-import { handle_draw_route } from '@/DTP_3D/module/handle';
 import RouteEditSection from '@/components/home/RouteEditSection.vue';
 import ImportantAreaSection from '@/components/home/ImportantAreaSection.vue';
 import IconGetLocate from '@/components/icons/iconGetLocate.vue';
@@ -173,12 +192,20 @@ import IconPoliceActive from '@/components/icons/tools/IconPoliceActive.vue';
 import IconPolice from '@/components/icons/tools/IconPolice.vue';
 import PoliceSection from '@/components/home/PoliceSection.vue';
 import policeController from '@/services/controller/policeController';
+import taskController from '@/services/controller/taskController';
 import PoliceDetailSection from '@/components/home/PoliceDetailSection.vue';
 import IconImportantPos from '@/components/icons/IconImportantPos.vue';
 import IconImportantPosActive from '@/components/icons/IconImportantPosActive.vue';
 import ImportantPosSection from '@/components/home/ImportantPosSection.vue';
+import IconTaskActive from '@/components/icons/IconTaskActive.vue';
+import IconTask from '@/components/icons/IconTask.vue';
+import TaskSection from '@/components/home/TaskSection.vue';
+import posController from '@/services/controller/posController';
+
 const store = useMapStore();
 const editingModelStore = useEditingModel();
+
+
 
 const onClickIcon = (name: ICON_TOOL_ACTIVE) => {
   switch (name) {
@@ -198,9 +225,9 @@ const onClickIcon = (name: ICON_TOOL_ACTIVE) => {
       else exitFullscreen();
       break;
     case ICON_TOOL_ACTIVE.POLYGON:
-      //console.log(show_camera_position());
-      //DTP_DRAW.turnOnDrawPolygon();
-      //handle_draw_route();
+      break;
+    case ICON_TOOL_ACTIVE.IMPORTANT_LOCAL:
+      posController.turnOnPosition();
       break;
     case ICON_TOOL_ACTIVE.SNIPER:
       sniperController.turnOnSniper();
@@ -215,6 +242,9 @@ const onClickIcon = (name: ICON_TOOL_ACTIVE) => {
     case ICON_TOOL_ACTIVE.LOCATE:
       trackingGPS();
       break;
+    case ICON_TOOL_ACTIVE.TASK:
+      taskController.turnOnTask();
+      break;
     default:
       break;
   }
@@ -223,4 +253,3 @@ const onClickIcon = (name: ICON_TOOL_ACTIVE) => {
 
 // Init map
 </script>
-<script setup lang="ts"></script>

@@ -15,7 +15,7 @@
       <div class="overflow-auto m-4">
         <div class="flex flex-row items-center">
           <img
-            :src="item.avatarUrl !== '' ? item?.avatarUrl : '/images/baseMap/no_image.png'"
+            :src="item.avatar_path !== '' ? item?.avatar_path : '/images/baseMap/no_image.png'"
             alt="layer-map"
             width="78"
             height="59"
@@ -75,7 +75,7 @@
             <div class="flex justify-between items-center text-base mt-1 text-date font-normal">
               <a-typography-text class="font-bold text-white">Ngày sinh:</a-typography-text>
               <a-typography-text class="text-[#C0C0C0]">
-                {{ item?.birthday }}
+                {{ item?.birthday}}
               </a-typography-text>
             </div>
           </div>
@@ -91,7 +91,7 @@
             <div class="flex justify-between items-center text-base mt-1 text-date font-normal">
               <a-typography-text class="font-bold text-white">Chức vụ:</a-typography-text>
               <a-typography-text class="text-[#C0C0C0]">
-                {{ item?.position }}
+                {{ item?.function }}
               </a-typography-text>
             </div>
           </div>
@@ -115,7 +115,6 @@ import { useMapStore } from '@/stores/map';
 import { ICON_TOOL_ACTIVE } from '@/configs/enums';
 
 import ButtonTool from '@/components/home/ButtonTool.vue';
-import IconGPS from '@/components/icons/IconGPS.vue';
 import IconCall from '@/components/icons/IconCall.vue';
 import IconMes from '@/components/icons/IconMes.vue';
 import { flyTo } from '@/DTP_3D/module/camera';
@@ -131,8 +130,8 @@ watch(
 );
 const flyToPos = () => {
   flyTo({
-    latitude: item.value.location.coordinates[1],
-    longitude: item.value.location.coordinates[0],
+    latitude: item.value.position.latitude,
+    longitude: item.value.position.longitude,
     height: 1000,
   });
 };

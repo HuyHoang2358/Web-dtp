@@ -1,9 +1,9 @@
-import { ref } from 'vue';
+import { type Ref, ref } from 'vue';
 import { defineStore } from 'pinia';
 import { ICON_TOOL_ACTIVE } from '@/configs/enums';
 
 export const useMapStore = defineStore('map', () => {
-  const iconToolActive = ref<ICON_TOOL_ACTIVE | undefined>(undefined);
+  const iconToolActive = ref<ICON_TOOL_ACTIVE | undefined>(ICON_TOOL_ACTIVE.POLYGON);
   const selectingModelInfo = ref();
   const selectingModelEntity = ref();
   const policeDetail = ref(false);
@@ -12,21 +12,15 @@ export const useMapStore = defineStore('map', () => {
     name: 'Nguyễn Văn XƯ',
     code: 'MK3',
     phone: '0868695328',
-    avatarUrl: '/images/BCA/police.jpg',
-    description: '',
-    addressDto: {
-      province: 'Thành phố Hà Nội',
-      district: 'Quận Ba Đình',
-      commune: 'Phường Trúc Bạch',
-      streetAddress: '',
+    avatar_path: '/images/BCA/police.jpg',
+    email: '',
+    position: {
+      id: '',
+      latitude: 0,
+      longitude: 0,
+      height: 0,
     },
-    position: 'Thành viên',
-    birthday: '19/07/1982',
-    location: {
-      type: 'Point',
-      coordinates: [105.8278872181121, 21.03092759331635],
-    },
-    importantLocationId: '',
+    'status': 'active',
   });
   const selectingModel = ref({
     id: '',
@@ -40,6 +34,19 @@ export const useMapStore = defineStore('map', () => {
     scale: 1,
   });
   const labelEntities = ref([]);
+
+  const policeEntities:Ref<any[]>  = ref([])
+  const positionEntities :Ref<any[]> = ref([])
+
+  const trafficEntities:Ref<any[]> = ref([])
+  const carArea1Entity = ref([])
+  const carArea2Entity = ref([])
+  const routPoints :Ref<number[]> = ref([])
+
+  const is_tracking = ref(false)
+  const tracking_interval = ref()
+
+  const is_directing = ref(false)
 
   function changeSelectingModel(model: any) {
     selectingModel.value = model;
@@ -58,5 +65,14 @@ export const useMapStore = defineStore('map', () => {
     selectingModelInfo,
     selectingModelEntity,
     labelEntities,
+    policeEntities,
+    positionEntities,
+    trafficEntities,
+    carArea1Entity,
+    carArea2Entity,
+    routPoints,
+    is_tracking,
+    tracking_interval,
+    is_directing
   };
 });

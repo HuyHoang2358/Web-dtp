@@ -4,52 +4,62 @@ import { useEditingPos } from '@/stores/editingPos';
 import { posHandle } from '@/DTP_3D/module/handle/posHandle';
 
 import { fetchRois } from '@/services/apis/roi';
+import { fetchTasks } from '@/services/apis/task';
+import { useMapStore } from '@/stores/map';
+import { getViewer } from '@/DTP_3D/lib/common';
 
 export default {
+  async turnOffPosition() {
+    const mapStore = useMapStore();
+    const viewer = getViewer();
+    const positionEntities = mapStore.positionEntities;
+    positionEntities.forEach((entity: any) => {
+      viewer.entities.remove(entity);
+    });
+    mapStore.positionEntities = [];
+  },
+
   updatePos(pos: any) {
     const editingPosStore = useEditingPos();
-    editingPosStore.info.lat = pos.lat;
-    editingPosStore.info.lng = pos.lng;
+    editingPosStore.info.position.latitude = pos.lat;
+    editingPosStore.info.position.longitude = pos.lng;
     let posEntity = editingPosStore.entity;
     if (posEntity) {
-      updatePinNewPosition(posEntity, pos);
+      updatePinNewPosition(posEntity, pos,editingPosStore.info.pin);
     } else {
       posEntity = createPinPosition(
         pos,
-        editingPosStore.info.name,
-        editingPosStore.info.type,
-        editingPosStore.info.colorId,
+        editingPosStore.info.pin,
       );
       editingPosStore.entity = posEntity;
     }
   },
+
   async getPosition() {
     console.log('getPos');
     await posHandle();
   },
 
   async turnOnPosition() {
-    const res = await fetchRois();
-    const rois = res?.data || [];
-    console.log(rois);
-    for (let i = 0; i < rois.length; i++) {
-      const pos = {
-        lng: rois[i].location.coordinates[0],
-        lat: rois[i].location.coordinates[1],
-      };
-      let type = '';
-      let colorId = 0;
-      if (rois[i].status === '/images/BCA/hospital.png') {
-        type = 'hospital.png';
-        colorId = 1;
-      } else if (rois[i].status === '/images/BCA/ca.png') {
-        type = 'star.png';
-        colorId = 2;
-      } else {
-        type = 'town.png';
-        colorId = 0;
-      }
-      createPinPosition(pos, rois[i].name, type, colorId);
+    await this.turnOffPosition()
+    const res = await fetchTasks("reconnaissance");
+    const tasks = res?.data || [];
+    let reconnaissancePoints : any[] = [];
+    tasks.forEach((task: any) => {
+      reconnaissancePoints = reconnaissancePoints.concat(task.target_reconnaissances);
+    });
+    console.log("reconnaissancePoints", reconnaissancePoints);
+    const mapStore = useMapStore();
+    for (let i = 0; i < reconnaissancePoints.length; i++) {
+      mapStore.positionEntities.push(createPinPosition(
+        {
+              lat: reconnaissancePoints[i].position.latitude,
+              lng: reconnaissancePoints[i].position.longitude,
+            },
+        {
+              color: reconnaissancePoints[i].location_category.color,
+              cesium_icon: reconnaissancePoints[i].location_category.cesium_icon,
+        }));
     }
   },
 

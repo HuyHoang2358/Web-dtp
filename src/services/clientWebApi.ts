@@ -1,6 +1,8 @@
 // @ts-nocheck
 import axios from 'axios';
+/*
 import store from '@/store';
+*/
 import router from '@/router';
 import { LOGIN_PAGE_PATH } from '@/configs/routePath';
 
@@ -12,9 +14,9 @@ const clientWebApi = axios.create({
 clientWebApi.interceptors.request.use(
   async (config: any) => {
     config.headers = {
-      Authorization: store.getters['AUTH/getToken']
+     /* Authorization: store.getters['AUTH/getToken']
         ? `Bearer ${store.getters['AUTH/getToken']}`
-        : undefined,
+        : undefined,*/
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       ...config.headers,

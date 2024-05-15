@@ -6,14 +6,15 @@ import { getViewer, hiddenHTMLElementByClassName } from '@/DTP_3D/lib/common';
 import type { AreaMetaData, BaseMapLayer } from '@/DTP_3D/type/DTP3D.type';
 import { flyTo } from '@/DTP_3D/module/camera';
 import { DATA3D_TILES } from '@/DTP_3D/config/data3D';
-import { addTileSet, visualizeModelEntity } from '@/DTP_3D/module/entity';
-import { getNoTextureObjects, getTextureObjects } from '@/DTP_3D/api/entity';
+import { addTileSet, visualizeCityObj } from '@/DTP_3D/module/entity';
+import { getCityObjects } from '@/DTP_3D/api/entity';
 import { createNameOverLay, stop_handle } from '@/DTP_3D/module/handle';
 
 function getMapType(map_type: string) {
   return map_type.substring(0, 2);
 }
 function mountViewer(HTML_element_id: string) {
+
   return new Cesium.Viewer(HTML_element_id, {
     baseLayerPicker: true, //  type map
     vrButton: false,
@@ -65,9 +66,6 @@ export function setDefaultMap() {
     tile.tileset.show = false;
   });
   if (viewer?.entities) viewer.entities.removeAll();
-  /*store.getters['VIEWER/getEntities'].forEach((entity: any) => {
-    entity.entity.show = false;
-  });*/
 }
 
 export async function turnOnArea(area: AreaMetaData, isDefault = true) {
@@ -77,7 +75,6 @@ export async function turnOnArea(area: AreaMetaData, isDefault = true) {
     case '2D':
       break;
     case '3D':
-      //draw_polygon();
       if (area.type_data === 'tile') {
         // Tile
         const data_tile = DATA3D_TILES.find((e) => e.area_id === area.id);
@@ -92,17 +89,10 @@ export async function turnOnArea(area: AreaMetaData, isDefault = true) {
         }
       } else {
         let objs = null;
-        if (area.type_key.includes('NO')) {
-          // No Texture
-          objs = await getNoTextureObjects(area);
-        } else {
-          // Text ture
-          objs = await getTextureObjects(area);
-        }
+        objs = await getCityObjects(area);
 
-        console.log('OBJs', objs);
         for (const obj of objs) {
-          const entity = visualizeModelEntity(obj.model);
+          const entity = visualizeCityObj(obj);
           await store.dispatch('VIEWER/pushEntity', { info: obj, entity: entity });
         }
       }

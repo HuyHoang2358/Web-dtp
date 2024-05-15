@@ -152,22 +152,21 @@ const formRef = ref();
 const title = 'Thêm mới thông tin cán bộ';
 
 const formState: UnwrapRef<FormState> = reactive({
+  name: 'Nguyễn Văn X',
+  phone: '0864524XXX',
   avatarUrl: '/images/BCA/police.jpg',
   birthday: '19/07/1979',
+  function: 'Chiến sĩ',
+  position: {
+    latitude: 0,
+    longitude: 0,
+    height: 0,
+  },
+  email: "",
+  password: "",
+  status: "",
   code: 'MK5',
   description: '',
-  importantLocationId: '',
-  name: 'Nguyễn Văn X',
-  phone: '0864524215',
-  position: 'Tổ trưởng',
-  commune: 'Phường Trúc Bạch',
-  district: 'Quận Ba Đình',
-  province: 'Thành phố Hà Nội',
-  streetAddress: '',
-  location: {
-    type: 'Point',
-    coordinates: [0, 0],
-  },
 });
 
 /*const points = [
